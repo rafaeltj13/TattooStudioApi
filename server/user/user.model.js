@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
+const errorMessages = require('../helpers/errorMessages')
 
 /**
  * User Schema
@@ -11,15 +12,34 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  mobileNumber: {
+  password: {
     type: String,
-    required: true,
-    match: [/^[1-9][0-9]{9}$/, 'The value of path {PATH} ({VALUE}) is not a valid mobile number.']
+    required: [true, errorMessages.USER.REQUIRED_PASSWORD]
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  name: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: Number,
+    required: true
+  },
+  gender: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    /* XX9XXXXXXXX ou XXXXXXXXXX */
+    match: [constants.PHONE_NO_REGEX, errorMessages.USER.INVALID_PHONE],
+    trim: true,
+    required: [true, errorMessages.USER.REQUIRED_PHONE]
+  },
+  photo: {
+
+  },
+  createdAt: Date,
+  updatedAt: Date
 });
 
 /**
