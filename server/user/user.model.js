@@ -11,35 +11,7 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true
-  },
-  password: {
-    type: String,
-    required: [true, errorMessages.USER.REQUIRED_PASSWORD]
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  age: {
-    type: Number,
-    required: true
-  },
-  gender: {
-    type: String,
-    required: true
-  },
-  phone: {
-    type: String,
-    /* XX9XXXXXXXX ou XXXXXXXXXX */
-    match: [constants.PHONE_NO_REGEX, errorMessages.USER.INVALID_PHONE],
-    trim: true,
-    required: [true, errorMessages.USER.REQUIRED_PHONE]
-  },
-  photo: {
-
-  },
-  createdAt: Date,
-  updatedAt: Date
+  }
 });
 
 /**

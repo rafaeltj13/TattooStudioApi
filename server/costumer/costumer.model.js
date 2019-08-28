@@ -4,7 +4,8 @@ const httpStatus = require('http-status');
 const bcrypt = require('bcrypt');
 const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages')
-const constants = require('../helpers/constants');
+const { COSTUMER } = require('../helpers/constants');
+const { validatePassword } = require('../helpers/validator')
 
 const CostumerSchema = new mongoose.Schema({
     username: {
@@ -24,8 +25,8 @@ const CostumerSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        minlength: [constants.NOME_COMPLETO_USUARIO_TAMANHO_MINIMO, errorMessages.COSTUMER_NAME_MIN_LENGTH],
-        maxlength: [constants.NOME_COMPLETO_USUARIO_TAMANHO_MAXIMO, errorMessages.COSTUMER_NAME_MAX_LENGTH],
+        minlength: [COSTUMER.NAME_MIN_LENGTH, errorMessages.COSTUMER_NAME_MIN_LENGTH],
+        maxlength: [COSTUMER.NAME_MAX_LENGTH, errorMessages.COSTUMER_NAME_MAX_LENGTH],
         required: true
     },
     age: {
@@ -49,6 +50,12 @@ const CostumerSchema = new mongoose.Schema({
 });
 
 CostumerSchema.pre('save', function (next) {
+    const errorMsg = validatePassword(this.password);
+    if (!errorMsg) {
+        const passwordError = new APIError(errorMsg, httpStatus.BAD_REQUEST, true);
+        return next(passwordError);
+    }
+
     const jump = 10;
     const passwordHash = bcrypt.hashSync(this.password, jump);
     this.password = passwordHash;
@@ -71,15 +78,15 @@ CostumerSchema.options.toJSON = {
     }
 };
 
-CostumerSchema.methods.getCostumer = function() {
+CostumerSchema.methods.getCostumer = function () {
     return Promise.resolve(this);
 };
 
-CostumerSchema.methods.comparePassword = function(password) {
+CostumerSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-CostumerSchema.statics.statics._findByIdAndUpdate = function(idCostumer, costumer, options) {
+CostumerSchema.statics.statics._findByIdAndUpdate = function (idCostumer, costumer, options) {
     preUpdate(costumer);
     return this.findByIdAndUpdate(idCostumer, costumer, options)
 };
