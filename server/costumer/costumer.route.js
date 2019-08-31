@@ -8,4 +8,11 @@ router.route('/')
     .get(expressJwt({ secret: config.jwtSecret }), costumerCtrl.getAll)
     .post(costumerCtrl.create);
 
+router.route('/:idCostumer')
+    .get(expressJwt({ secret: config.jwtSecret }), costumerCtrl.getById)
+    .patch(expressJwt({ secret: config.jwtSecret }), costumerCtrl.update)
+    .delete(expressJwt({ secret: config.jwtSecret }), costumerCtrl.delete)
+
+router.param('idCostumer', costumerCtrl.load)
+
 module.exports = router;

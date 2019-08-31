@@ -23,7 +23,7 @@ costumerController.getByParams = (req, res, next) => {
     costumerService.getByParams(req.query)
         .then(costumer => res.json(costumer))
         .catch(e => next(e));
-}
+};
 
 costumerController.create = (req, res, next) => {
     costumerService.create(req.body)
@@ -41,6 +41,6 @@ costumerController.delete = (req, res, next) => {
     costumerService.delete(req.costumer._id)
         .then(costumer => res.json(costumer))
         .catch(e => next(e));
-}
+};
 
 module.exports = costumerController

@@ -9,7 +9,7 @@ module.exports = Object.freeze({
     COSTUMER_INVALID_ID: 'O ID do Cliente é inválido.',
     COSTUMER_SEARCH: 'Não foi possível encontrar o Cliente.',
     COSTUMER_SAVE: 'Não foi possível salvar o Cliente.',
-    COSTUMER_SAVE: 'Não foi possível atualizar o Cliente.',
+    COSTUMER_UPDATE: 'Não foi possível atualizar o Cliente.',
     COSTUMER_DELETE: 'Não foi possível deletar o Cliente.',
     COSTUMER_NAME_MIN_LENGTH: 'O nome completo do Cliente deve ter no mínimo 5 caracteres.',
     COSTUMER_NAME_MAX_LENGTH: 'O nome completo do Cliente deve ter no máximo 50 caracteres.',
