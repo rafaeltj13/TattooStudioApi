@@ -43,4 +43,4 @@ costumerController.delete = (req, res, next) => {
         .catch(e => next(e));
 };
 
-module.exports = costumerController
+module.exports = costumerController;

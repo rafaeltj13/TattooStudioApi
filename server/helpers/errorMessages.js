@@ -16,7 +16,7 @@ module.exports = Object.freeze({
     COSTUMER_EMAIL_REQUIRED: 'O e-mail do Cliente é obrigatório.',
     COSTUMER_EMAIL_INVALID: 'O e-mail ({VALUE}) é inválido.',
     COSTUMER_PASSWORD_REQUIRED: 'A senha do Cliente é obrigatória.',
-    COSTUMER_PASSWORD_INVALID: 'A senha do Cliente é obrigatória.',
+    COSTUMER_PASSWORD_INVALID: 'A senha do Cliente é inválida.',
     COSTUMER_PHONE_REQUIRED: 'O telefone do Cliente é obrigatório.',
     COSTUMER_PHONE_INVALID: 'O número de telefone ({VALUE}) do Cliente é inválido.',
 });

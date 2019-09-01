@@ -43,3 +43,5 @@ costumerService.delete = id => new Promise((resolve, reject) => {
         })
         .catch(erro => reject(erro));
 });
+
+module.exports = costumerService;

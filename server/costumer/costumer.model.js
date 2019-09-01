@@ -4,7 +4,7 @@ const httpStatus = require('http-status');
 const bcrypt = require('bcrypt');
 const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages')
-const { COSTUMER } = require('../helpers/constants');
+const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator')
 
 const CostumerSchema = new mongoose.Schema({
@@ -14,19 +14,19 @@ const CostumerSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, errorMessages.USER.REQUIRED_PASSWORD]
+        required: [true, errorMessages.COSTUMER_PASSWORD_REQUIRED]
     },
     email: {
         type: String,
-        match: [constants.EMAIL_REGEX, errorMessages.COSTUMER_EMAIL_INVALID],
+        match: [constants.COSTUMER.EMAIL_REGEX, errorMessages.COSTUMER_EMAIL_INVALID],
         required: [true, errorMessages.COSTUMER_EMAIL_REQUIRED],
         unique: true,
         trim: true
     },
     name: {
         type: String,
-        minlength: [COSTUMER.NAME_MIN_LENGTH, errorMessages.COSTUMER_NAME_MIN_LENGTH],
-        maxlength: [COSTUMER.NAME_MAX_LENGTH, errorMessages.COSTUMER_NAME_MAX_LENGTH],
+        minlength: [constants.COSTUMER.NAME_MIN_LENGTH, errorMessages.COSTUMER_NAME_MIN_LENGTH],
+        maxlength: [constants.COSTUMER.NAME_MAX_LENGTH, errorMessages.COSTUMER_NAME_MAX_LENGTH],
         required: true
     },
     age: {
@@ -40,7 +40,7 @@ const CostumerSchema = new mongoose.Schema({
     phone: {
         type: String,
         /* XX9XXXXXXXX ou XXXXXXXXXX */
-        match: [constants.PHONE_NO_REGEX, errorMessages.COSTUMER_PHONE_INVALID],
+        // match: [constants.COSTUMER.PHONE_NO_REGEX, errorMessages.COSTUMER_PHONE_INVALID],
         trim: true,
         required: [true, errorMessages.COSTUMER_PHONE_REQUIRED]
     },
@@ -51,11 +51,10 @@ const CostumerSchema = new mongoose.Schema({
 
 CostumerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
-    if (!errorMsg) {
+    if (errorMsg) {
         const passwordError = new APIError(errorMsg, httpStatus.BAD_REQUEST, true);
         return next(passwordError);
     }
-
     const jump = 10;
     const passwordHash = bcrypt.hashSync(this.password, jump);
     this.password = passwordHash;
@@ -86,7 +85,7 @@ CostumerSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-CostumerSchema.statics.statics._findByIdAndUpdate = function (idCostumer, costumer, options) {
+CostumerSchema.statics._findByIdAndUpdate = function (idCostumer, costumer, options) {
     preUpdate(costumer);
     return this.findByIdAndUpdate(idCostumer, costumer, options)
 };
