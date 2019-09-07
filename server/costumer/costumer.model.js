@@ -85,6 +85,18 @@ CostumerSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
+CostumerSchema.statics.getByUserName = function (username) {
+    return this.findOne({ username })
+        .exec()
+        .then(customer => {
+            if (customer) {
+                return customer;
+            }
+            const err = new APIError(errorMessages.COSTUMER_NOT_FOUND, httpStatus.NOT_FOUND);
+            return Promise.reject(err);
+        });
+};
+
 CostumerSchema.statics._findByIdAndUpdate = function (idCostumer, costumer, options) {
     preUpdate(costumer);
     return this.findByIdAndUpdate(idCostumer, costumer, options)

@@ -19,7 +19,7 @@ authController.signinCostumer = (req, res, next) => {
 
       return res.json({
         token,
-        idCostumer: costumer._id
+        username: costumer.username
       });
     } else {
       const err = new APIError(errorMessages.COSTUMER_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);
