@@ -4,7 +4,7 @@ module.exports = Object.freeze({
     WRONG_PASSWORD: 'Senha incorreta.',
     FORBIDDEN: 'Você não possui permissão para acessar esse recurso.',
 
-    //Costumer
+    //Customer
     COSTUMER_NOT_FOUND: 'Cliente não encontrado.',
     COSTUMER_INVALID_ID: 'O ID do Cliente é inválido.',
     COSTUMER_SEARCH: 'Não foi possível encontrar o Cliente.',

@@ -3,23 +3,23 @@ const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const config = require('../../config/config');
 const errorMessages = require('../helpers/errorMessages');
-const Costumer = require('../costumer/costumer.model')
+const Customer = require('../customer/customer.model')
 
 const authController = {};
 
-authController.signinCostumer = (req, res, next) => {
+authController.signinCustomer = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  Costumer.getByUserName(username).then(costumer => {
-    if (costumer.comparePassword(password)) {
+  Customer.getByUserName(username).then(customer => {
+    if (customer.comparePassword(password)) {
       const token = jwt.sign({
-        idCostumer: costumer._id
+        idCustomer: customer._id
       }, config.jwtSecret);
 
       return res.json({
         token,
-        username: costumer.username
+        username: customer.username
       });
     } else {
       const err = new APIError(errorMessages.COSTUMER_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);

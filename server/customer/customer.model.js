@@ -7,7 +7,7 @@ const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator')
 
-const CostumerSchema = new mongoose.Schema({
+const CustomerSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true
@@ -49,7 +49,7 @@ const CostumerSchema = new mongoose.Schema({
     updatedAt: Date
 });
 
-CostumerSchema.pre('save', function (next) {
+CustomerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
     if (errorMsg) {
         const passwordError = new APIError(errorMsg, httpStatus.BAD_REQUEST, true);
@@ -63,29 +63,29 @@ CostumerSchema.pre('save', function (next) {
     next();
 });
 
-const preUpdate = (costumer, next) => {
-    delete costumer.password;
-    delete costumer.createdAt;
-    costumer.updatedAt = Date.now();
+const preUpdate = (customer, next) => {
+    delete customer.password;
+    delete customer.createdAt;
+    customer.updatedAt = Date.now();
     next && next();
 };
 
-CostumerSchema.options.toJSON = {
+CustomerSchema.options.toJSON = {
     transform: function (doc, ret) {
         delete ret.password;
         delete ret.__v;
     }
 };
 
-CostumerSchema.methods.getCostumer = function () {
+CustomerSchema.methods.getCustomer = function () {
     return Promise.resolve(this);
 };
 
-CostumerSchema.methods.comparePassword = function (password) {
+CustomerSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-CostumerSchema.statics.getByUserName = function (username) {
+CustomerSchema.statics.getByUserName = function (username) {
     return this.findOne({ username })
         .exec()
         .then(customer => {
@@ -97,9 +97,9 @@ CostumerSchema.statics.getByUserName = function (username) {
         });
 };
 
-CostumerSchema.statics._findByIdAndUpdate = function (idCostumer, costumer, options) {
-    preUpdate(costumer);
-    return this.findByIdAndUpdate(idCostumer, costumer, options)
+CustomerSchema.statics._findByIdAndUpdate = function (idCustomer, customer, options) {
+    preUpdate(customer);
+    return this.findByIdAndUpdate(idCustomer, customer, options)
 };
 
-module.exports = mongoose.model('Costumer', CostumerSchema);
+module.exports = mongoose.model('Customer', CustomerSchema);
