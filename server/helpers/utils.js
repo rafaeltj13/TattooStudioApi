@@ -1,5 +1,5 @@
 const constants = {
-    COSTUMER: {
+    USER: {
         NAME_MIN_LENGTH: 5,
         NAME_MAX_LENGTH: 50,
         PASSWORD_MIN_LENGTH: 4,

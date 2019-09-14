@@ -31,4 +31,28 @@ authController.signinCustomer = (req, res, next) => {
   })
 }
 
+authController.signinArtist = (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  Artist.getByUserName(username).then(artist => {
+    if (artist.comparePassword(password)) {
+      const token = jwt.sign({
+        idArtist: artist._id
+      }, config.jwtSecret);
+
+      return res.json({
+        token,
+        username: artist.username
+      });
+    } else {
+      const err = new APIError(errorMessages.ARTIST_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);
+      return next(err);
+    }
+  }).catch(error => {
+    const err = new APIError(error, httpStatus.BAD_REQUEST);
+    return next(err);
+  })
+}
+
 module.exports = authController;

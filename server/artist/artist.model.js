@@ -7,26 +7,26 @@ const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator');
 
-const CustomerSchema = new mongoose.Schema({
+const ArtistSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true
     },
     password: {
         type: String,
-        required: [true, errorMessages.CUSTOMER_PASSWORD_REQUIRED]
+        required: [true, errorMessages.ARTIST_PASSWORD_REQUIRED]
     },
     email: {
         type: String,
-        match: [constants.USER.EMAIL_REGEX, errorMessages.CUSTOMER_EMAIL_INVALID],
-        required: [true, errorMessages.CUSTOMER_EMAIL_REQUIRED],
+        match: [constants.USER.EMAIL_REGEX, errorMessages.ARTIST_EMAIL_INVALID],
+        required: [true, errorMessages.ARTIST_EMAIL_REQUIRED],
         unique: true,
         trim: true
     },
     name: {
         type: String,
-        minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.CUSTOMER_NAME_MIN_LENGTH],
-        maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
+        minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.ARTIST_NAME_MIN_LENGTH],
+        maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.ARTIST_NAME_MAX_LENGTH],
         required: true
     },
     age: {
@@ -40,17 +40,22 @@ const CustomerSchema = new mongoose.Schema({
     phone: {
         type: String,
         /* XX9XXXXXXXX ou XXXXXXXXXX */
-        // match: [constants.USER.PHONE_NO_REGEX, errorMessages.CUSTOMER_PHONE_INVALID],
+        // match: [constants.USER.PHONE_NO_REGEX, errorMessages.ARTIST_PHONE_INVALID],
         trim: true,
-        required: [true, errorMessages.CUSTOMER_PHONE_REQUIRED]
+        required: [true, errorMessages.ARTIST_PHONE_REQUIRED]
+    },
+    studio: {
+        type: String,
+        required: true
     },
     schedule: String,
+    rating: Number,
     photo: String,
     createdAt: Date,
     updatedAt: Date
 });
 
-CustomerSchema.pre('save', function (next) {
+ArtistSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
     if (errorMsg) {
         const passwordError = new APIError(errorMsg, httpStatus.BAD_REQUEST, true);
@@ -64,61 +69,61 @@ CustomerSchema.pre('save', function (next) {
     next();
 });
 
-const preUpdate = (customer, next) => {
-    delete customer.password;
-    delete customer.createdAt;
-    customer.updatedAt = Date.now();
+const preUpdate = (artist, next) => {
+    delete artist.password;
+    delete artist.createdAt;
+    artist.updatedAt = Date.now();
     next && next();
 };
 
-CustomerSchema.options.toJSON = {
+ArtistSchema.options.toJSON = {
     transform: function (doc, ret) {
         delete ret.password;
         delete ret.__v;
     }
 };
 
-CustomerSchema.methods.getCustomer = function () {
+ArtistSchema.methods.getArtist = function () {
     return Promise.resolve(this);
 };
 
-CustomerSchema.methods.comparePassword = function (password) {
+ArtistSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-CustomerSchema.statics.getById = function (id) {
+ArtistSchema.statics.getById = function (id) {
     return this.findById(id)
         .exec()
-        .then((customer) => {
-            if (customer) {
-                return customer;
+        .then((artist) => {
+            if (artist) {
+                return artist;
             }
-            const err = new APIError(errorMessages.CUSTOMER_NOT_FOUND, httpStatus.NOT_FOUND);
+            const err = new APIError(errorMessages.ARTIST_NOT_FOUND, httpStatus.NOT_FOUND);
             return Promise.reject(err);
         })
         .catch(erro => {
             if (!(erro instanceof APIError)) {
-                erro = new APIError(errorMessages.CUSTOMER_INVALID_ID, httpStatus.BAD_REQUEST);
+                erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
             }
             return Promise.reject(erro);
         });
 };
 
-CustomerSchema.statics.getByUserName = function (username) {
+ArtistSchema.statics.getByUserName = function (username) {
     return this.findOne({ username })
         .exec()
-        .then(customer => {
-            if (customer) {
-                return customer;
+        .then(artist => {
+            if (artist) {
+                return artist;
             }
-            const err = new APIError(errorMessages.CUSTOMER_NOT_FOUND, httpStatus.NOT_FOUND);
+            const err = new APIError(errorMessages.ARTIST_NOT_FOUND, httpStatus.NOT_FOUND);
             return Promise.reject(err);
         });
 };
 
-CustomerSchema.statics._findByIdAndUpdate = function (idCustomer, customer, options) {
-    preUpdate(customer);
-    return this.findByIdAndUpdate(idCustomer, customer, options)
+ArtistSchema.statics._findByIdAndUpdate = function (idArtist, artist, options) {
+    preUpdate(artist);
+    return this.findByIdAndUpdate(idArtist, artist, options)
 };
 
-module.exports = mongoose.model('Customer', CustomerSchema);
+module.exports = mongoose.model('Artist', ArtistSchema);
