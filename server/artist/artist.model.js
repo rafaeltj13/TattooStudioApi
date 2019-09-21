@@ -27,15 +27,15 @@ const ArtistSchema = new mongoose.Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.ARTIST_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.ARTIST_NAME_MAX_LENGTH],
-        required: true
+        required: [true, errorMessages.ARTIST_NAME_REQUIRED]
     },
     age: {
         type: Number,
-        required: true
+        required: [true, errorMessages.ARTIST_AGE_REQUIRED]
     },
     gender: {
         type: String,
-        required: true
+        required: [true, errorMessages.ARTIST_GENDER_REQUIRED]
     },
     phone: {
         type: String,

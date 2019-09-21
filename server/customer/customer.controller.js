@@ -38,7 +38,7 @@ customerController.update = (req, res, next) => {
 };
 
 customerController.delete = (req, res, next) => {
-    customerService.delete(reqcustomer._id)
+    customerService.delete(req.customer._id)
         .then(customer => res.json(customer))
         .catch(e => next(e));
 };

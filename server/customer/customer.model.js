@@ -27,15 +27,16 @@ const CustomerSchema = new mongoose.Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.CUSTOMER_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
-        required: true
+        maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
+        required: [true, errorMessages.CUSTOMER_NAME_REQUIRED]
     },
     age: {
         type: Number,
-        required: true
+        required: [true, errorMessages.CUSTOMER_AGE_REQUIRED]
     },
     gender: {
         type: String,
-        required: true
+        required: [true, errorMessages.CUSTOMER_GENDER_REQUIRED]
     },
     phone: {
         type: String,
