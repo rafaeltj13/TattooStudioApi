@@ -6,7 +6,7 @@ const appointmentCtrl = require('./appointment.controller');
 
 router.route('/')
     .get(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.getAll)
-    .post(appointmentCtrl.create);
+    .post(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.create);
 
 router.route('/:idAppointment')
     .get(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.getById)

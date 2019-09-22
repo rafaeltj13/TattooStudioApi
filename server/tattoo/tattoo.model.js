@@ -3,21 +3,20 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages')
-const { constants } = require('../helpers/utils');
 
 const TattooSchema = new mongoose.Schema({
-    image: {
+    imagePath: {
         type: String,
         required: [true, errorMessages.TATTOO_IMAGE_REQUIRED]
     },
     place: {
         type: String,
         required: [true, errorMessages.TATTOO_PLACE_REQUIRED]
-    }
+    },
     size: {
         type: Number,
         required: [true, errorMessages.TATTOO_SIZE_REQUIRED]
-    }
+    },
     createdAt: Date,
     updatedAt: Date
 });
@@ -46,20 +45,20 @@ TattooSchema.methods.getTattoo = () => {
 
 TattooSchema.statics.getById = id => {
     return this.findById(id)
-      .exec()
-      .then((tattoo) => {
-        if (tattoo) {
-          return tattoo;
-        }
-        const err = new APIError(errorMessages.TATTOO_NOT_FOUND, httpStatus.NOT_FOUND);
-        return Promise.reject(err);
-      })
-      .catch(erro => {
-        if (!(erro instanceof APIError)) {
-          erro = new APIError(errorMessages.TATTOO_INVALID_ID, httpStatus.BAD_REQUEST);
-        }
-        return Promise.reject(erro);
-      });
+        .exec()
+        .then((tattoo) => {
+            if (tattoo) {
+                return tattoo;
+            }
+            const err = new APIError(errorMessages.TATTOO_NOT_FOUND, httpStatus.NOT_FOUND);
+            return Promise.reject(err);
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.TATTOO_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
 };
 
 TattooSchema.statics._findByIdAndUpdate = (idTattoo, tattoo, options) => {

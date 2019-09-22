@@ -3,4 +3,45 @@ const errorMessages = require('../helpers/errorMessages');
 
 const appointmentService = {};
 
+appointmentService.getAll = (params = {}) => new Promise((resolve, reject) => {
+    Appointment.find(params)
+        .then(appointments => resolve(appointments))
+        .catch(error => reject(error || errorMessages.APPOINTMENT_NOT_FOUND));
+});
+
+appointmentService.getById = id => new Promise((resolve, reject) => {
+    Appointment.getById(id)
+        .then(appointment => resolve(appointment))
+        .catch(error => reject(error || errorMessages.APPOINTMENT_NOT_FOUND));
+});
+
+appointmentService.getByParams = (params = {}) => new Promise((resolve, reject) => {
+    Appointment.findOne(params)
+        .then(appointment => resolve(appointment))
+        .catch(error => reject(error || errorMessages.APPOINTMENT_NOT_FOUND));
+});
+
+appointmentService.create = appointment => new Promise((resolve, reject) => {
+    newAppointment = new Appointment(appointment)
+    newAppointment.save()
+        .then(savedAppointment => resolve(savedAppointment))
+        .catch(error => reject(error || errorMessages.APPOINTMENT_SAVE));
+});
+
+appointmentService.update = appointment => new Promise((resolve, reject) => {
+    Appointment._findByIdAndUpdate(appointment._id, appointment, { new: true })
+        .then(updatedAppointment => resolve(updatedAppointment))
+        .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+});
+
+appointmentService.delete = id => new Promise((resolve, reject) => {
+    appointmentService.getById(id)
+        .then(appointment => {
+            Appointment.remove({ _id: id })
+                .then(() => resolve(id))
+                .catch(error => reject(error || errorMessages.APPOINTMENT_DELETE));
+        })
+        .catch(erro => reject(erro));
+});
+
 module.exports = appointmentService;

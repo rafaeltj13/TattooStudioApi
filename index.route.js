@@ -1,25 +1,16 @@
 const express = require('express');
-const userRoutes = require('./server/user/user.route');
 const authRoutes = require('./server/auth/auth.route');
-const customerRoutes = require('./server/customer/customer.route')
-const artistRoutes = require('./server/artist/artist.route')
+const customerRoutes = require('./server/customer/customer.route');
+const artistRoutes = require('./server/artist/artist.route');
+const appointmentRoutes = require('./server/appointment/appointment.route');
+const tattooRoutes = require('./server/tattoo/tattoo.route');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
-// TODO: use glob to match *.route files
-
-/** GET /health-check - Check service health */
-router.get('/health-check', (req, res) =>
-  res.send('OK')
-);
-
-// mount user routes at /users
-router.use('/users', userRoutes);
-
-// mount auth routes at /auth
 router.use('/auth', authRoutes);
-
-router.use('/customer', customerRoutes);
-router.use('/artist', artistRoutes);
+router.use('/customers', customerRoutes);
+router.use('/artists', artistRoutes);
+router.use('/appointments', appointmentRoutes)
+router.use('/tattoos', tattooRoutes);
 
 module.exports = router;

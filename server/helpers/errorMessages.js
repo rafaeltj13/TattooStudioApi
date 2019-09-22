@@ -43,14 +43,19 @@ module.exports = Object.freeze({
     ARTIST_PHONE_INVALID: 'O número de telefone ({VALUE}) do Tatuador é inválido.',
 
     ///Tattoo
+    TATTOO_NOT_FOUND: 'A tatuagem não foi encontrada.',
+    TATTOO_INVALID_ID: 'O ID da tatuagem é inválido.',
     TATTOO_IMAGE_REQUIRED: 'A imagem de referência da tatuagem é obrigatória',
     TATTOO_SIZE_REQUIRED: 'O tamanho da tatuagem é obrigatório.',
     TATTOO_PLACE_REQUIRED: 'O local da tatuagem é obrigatório.',
-    TATTOO_NOT_FOUND: 'A tatuagem não foi encontrada.',
-    TATTOO_INVALID_ID: 'O ID da tatuagem é inválido.',
+    TATTOO_SAVE: 'Não foi possível salvar a Tatuagem.',
+    TATTOO_UPDATE: 'Não foi possível atualizar a Tatuagem.',
+    TATTOO_DELETE: 'Não foi possível deletar a Tatuagem.',
 
     //Appointment
     APPOINTMENT_NOT_FOUND: 'O orçamento não foi encontrada.',
     APPOINTMENT_INVALID_ID: 'O ID do orçamento é inválido.',
-
+    APPOINTMENT_SAVE: 'Não foi possível salvar o Orçamento.',
+    APPOINTMENT_UPDATE: 'Não foi possível atualizar o Orçamento.',
+    APPOINTMENT_DELETE: 'Não foi possível deletar o Orçamento.',
 });
