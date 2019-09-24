@@ -6,7 +6,7 @@ const tattooCtrl = require('./tattoo.controller');
 
 router.route('/')
     .get(expressJwt({ secret: config.jwtSecret }), tattooCtrl.getAll)
-    .post(expressJwt({ secret: config.jwtSecret }), tattooCtrl.create);
+    .post(/*expressJwt({ secret: config.jwtSecret }), */tattooCtrl.create);
 
 router.route('/:idTattoo')
     .get(expressJwt({ secret: config.jwtSecret }), tattooCtrl.getById)

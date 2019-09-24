@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const BASE_64 = 'base64';
 const IMGS_PATH = 'images';
-const IMAGES_TATTOO_PATH  = 'tattoo';
+const IMAGES_TATTOO_PATH = 'tattoo';
 
 const imageService = {
     IMAGES_TATTOO_PATH
@@ -11,7 +11,7 @@ const imageService = {
 
 imageService.save = (imageBase64, entity, entityPath) => new Promise((resolve, reject) => {
     const folderPath = `${IMGS_PATH}/${entityPath}`;
-    
+
     const dataUrlSeparator = ',';
     const imageBase64NoUrl = imageBase64.split(dataUrlSeparator).pop();
     const imageBuffer = Buffer.from(imageBase64NoUrl, BASE_64);
@@ -19,11 +19,9 @@ imageService.save = (imageBase64, entity, entityPath) => new Promise((resolve, r
     const hashFile = calculateHashFileNamee(entity);
     const fileNameWithExtension = `${hashFile}.${extension}`;
     const imagePath = `${folderPath}/${fileNameWithExtension}`;
-    
-    if (!fs.existsSync(folderPath)){
-        fs.mkdirSync(folderPath);
-    }
-    
+
+    if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath, { recursive: true });
+
     fs.writeFile(imagePath, imageBuffer, erro => {
         if (erro) reject(erro);
         resolve(imagePath);
