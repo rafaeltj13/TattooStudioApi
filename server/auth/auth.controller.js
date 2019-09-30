@@ -19,6 +19,7 @@ authController.signinCustomer = (req, res, next) => {
 
       return res.json({
         token,
+        id: customer._id,
         username: customer.username
       });
     } else {
@@ -43,6 +44,7 @@ authController.signinArtist = (req, res, next) => {
 
       return res.json({
         token,
+        id: artist._id,
         username: artist.username
       });
     } else {

@@ -1,5 +1,6 @@
 const Appointment = require('./appointment.model');
 const errorMessages = require('../helpers/errorMessages');
+const { convertAppointments } = require('../helpers/utils');
 
 const appointmentService = {};
 
@@ -42,6 +43,14 @@ appointmentService.delete = id => new Promise((resolve, reject) => {
                 .catch(error => reject(error || errorMessages.APPOINTMENT_DELETE));
         })
         .catch(erro => reject(erro));
+});
+
+appointmentService.getAppointments = (params = {}) => new Promise((resolve, reject) => {
+    const query = params.typeUser === 'artist' ? { artist: params.idUser } : { customer: params.idUser };
+
+    Appointment.find(query)
+        .then(appointments => resolve(convertAppointments(appointments, params.typeUser)))
+        .catch(error => reject(error || errorMessages.APPOINTMENT_NOT_FOUND));
 });
 
 module.exports = appointmentService;

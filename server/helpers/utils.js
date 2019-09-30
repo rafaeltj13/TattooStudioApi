@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const constants = {
     USER: {
         NAME_MIN_LENGTH: 5,
@@ -10,6 +12,29 @@ const constants = {
     OWNER: {
         STUDIO_MIN_LENGTH: 5
     }
+};
+
+const convertAppointments = (appointments, type) => {
+    return appointments.map(appointment => {
+
+        const image = fs.readFileSync(appointment.tattoo.imagePath);
+
+        return {
+            appointmentDate: appointment.appointmentDate,
+            price: appointment.price,
+            details: {
+                name: appointment[type].name,
+                imageBase64: image.toString('base64')
+            }
+        };
+    });
 }
 
-module.exports = { constants }
+const toBase64 = url => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(url);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+module.exports = { constants, convertAppointments }

@@ -11,7 +11,10 @@ router.route('/')
 router.route('/:idAppointment')
     .get(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.getById)
     .patch(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.update)
-    .delete(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.delete)
+    .delete(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.delete);
+
+router.route('/:typeUser/:idUser')
+    .get(expressJwt({ secret: config.jwtSecret }), appointmentCtrl.getAppointments);
 
 router.param('idAppointment', appointmentCtrl.load)
 

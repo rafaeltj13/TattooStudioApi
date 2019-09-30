@@ -43,4 +43,10 @@ appointmentController.delete = (req, res, next) => {
         .catch(e => next(e));
 };
 
+appointmentController.getAppointments = (req, res, next) => {
+    appointmentService.getAppointments(req.params)
+        .then(appointments => res.json(appointments))
+        .catch(e => next(e));
+};
+
 module.exports = appointmentController;

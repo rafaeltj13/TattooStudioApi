@@ -6,7 +6,17 @@ const errorMessages = require('../helpers/errorMessages')
 const Schema = mongoose.Schema;
 
 const AppointmentSchema = new mongoose.Schema({
-  date: [Date],
+  appointmentDate: [Date],
+  customer: {
+    type: Schema.Types.ObjectId,
+    ref: 'Customer',
+    autopopulate: true
+  },
+  artist: {
+    type: Schema.Types.ObjectId,
+    ref: 'Artist',
+    autopopulate: true
+  },
   tattoo: {
     type: Schema.Types.ObjectId,
     ref: 'Tattoo',
