@@ -20,6 +20,7 @@ const convertAppointments = (appointments, type) => {
         const image = fs.readFileSync(appointment.tattoo.imagePath);
 
         return {
+            id: appointment._id,
             appointmentDate: appointment.appointmentDate,
             price: appointment.price,
             details: {

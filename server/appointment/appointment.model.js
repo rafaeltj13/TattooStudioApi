@@ -22,9 +22,14 @@ const AppointmentSchema = new mongoose.Schema({
     ref: 'Tattoo',
     autopopulate: true
   },
+  status: {
+    type: String,
+    required: [true, errorMessages.APPOINTMENT_STATUS_REQUIRED]
+  },
   totalDuration: Number,
   sessions: Number,
   price: Number,
+  installments: Number,
   createdAt: Date,
   updatedAt: Date
 });
@@ -49,11 +54,11 @@ AppointmentSchema.options.toJSON = {
   }
 };
 
-AppointmentSchema.methods.getAppointment = () => {
+AppointmentSchema.methods.getAppointment = function () {
   return Promise.resolve(this);
 };
 
-AppointmentSchema.statics.getById = id => {
+AppointmentSchema.statics.getById = function (id) {
   return this.findById(id)
     .exec()
     .then((appointment) => {
@@ -71,7 +76,7 @@ AppointmentSchema.statics.getById = id => {
     });
 };
 
-AppointmentSchema.statics._findByIdAndUpdate = (idAppointment, appointment, options) => {
+AppointmentSchema.statics._findByIdAndUpdate = function (idAppointment, appointment, options) {
   preUpdate(appointment);
   return this.findByIdAndUpdate(idAppointment, appointment, options)
 };

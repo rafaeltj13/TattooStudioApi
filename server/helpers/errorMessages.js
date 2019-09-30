@@ -58,4 +58,5 @@ module.exports = Object.freeze({
     APPOINTMENT_SAVE: 'Não foi possível salvar o Orçamento.',
     APPOINTMENT_UPDATE: 'Não foi possível atualizar o Orçamento.',
     APPOINTMENT_DELETE: 'Não foi possível deletar o Orçamento.',
+    APPOINTMENT_STATUS_REQUIRED: 'O estado do orçamento é obrigatório.'
 });
