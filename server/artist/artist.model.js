@@ -44,10 +44,7 @@ const ArtistSchema = new mongoose.Schema({
         trim: true,
         required: [true, errorMessages.ARTIST_PHONE_REQUIRED]
     },
-    studio: {
-        type: String,
-        required: true
-    },
+    studio: String,
     schedule: String,
     rating: Number,
     photo: String,

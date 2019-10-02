@@ -3,13 +3,13 @@ const authCtrl = require('./auth.controller');
 
 const router = express.Router();
 
-router.route('/signinCustomer')
+router.route('/signincustomer')
   .post(authCtrl.signinCustomer)
 
-router.route('/signinArtist')
+router.route('/signinartist')
   .post(authCtrl.signinArtist)
 
-// router.route('signinOwner')
+// router.route('signinowner')
 //   .post(authCtrl.signinOwner)
 
 module.exports = router;

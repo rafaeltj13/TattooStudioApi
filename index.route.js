@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const authRoutes = require('./server/auth/auth.route');
 const customerRoutes = require('./server/customer/customer.route');
 const artistRoutes = require('./server/artist/artist.route');
@@ -12,5 +13,7 @@ router.use('/customers', customerRoutes);
 router.use('/artists', artistRoutes);
 router.use('/appointments', appointmentRoutes)
 router.use('/tattoos', tattooRoutes);
+
+router.use('/images', express.static(path.join(__dirname, '/images')));
 
 module.exports = router;

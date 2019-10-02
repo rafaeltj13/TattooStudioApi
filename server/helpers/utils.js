@@ -17,7 +17,7 @@ const constants = {
 const convertAppointments = (appointments, type) => {
     return appointments.map(appointment => {
 
-        const image = fs.readFileSync(appointment.tattoo.imagePath);
+        // const image = fs.readFileSync(appointment.tattoo.imagePath);
 
         return {
             id: appointment._id,
@@ -25,17 +25,11 @@ const convertAppointments = (appointments, type) => {
             price: appointment.price,
             details: {
                 name: appointment[type].name,
-                imageBase64: image.toString('base64')
+                // imageBase64: image.toString('base64')
+                imagePath: appointment.tattoo.imagePath
             }
         };
     });
-}
-
-const toBase64 = url => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(url);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
+};
 
 module.exports = { constants, convertAppointments }
