@@ -28,8 +28,8 @@ artistService.create = artist => new Promise((resolve, reject) => {
         .catch(error => reject(error || errorMessages.ARTIST_SAVE));
 });
 
-artistService.update = artist => new Promise((resolve, reject) => {
-    Artist._findByIdAndUpdate(artist._id, artist, { new: true })
+artistService.update = (artistId, artist) => new Promise((resolve, reject) => {
+    Artist._findByIdAndUpdate(artistId, artist, { new: true })
         .then(updatedArtist => resolve(updatedArtist))
         .catch(error => reject(error || errorMessages.ARTIST_UPDATE));
 });

@@ -32,7 +32,7 @@ customerController.create = (req, res, next) => {
 };
 
 customerController.update = (req, res, next) => {
-    customerService.update(req.body)
+    customerService.update(req.params.idCustomer, req.body)
         .then(customer => res.json(customer))
         .catch(e => next(e));
 };

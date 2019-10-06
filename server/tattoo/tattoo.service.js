@@ -37,8 +37,8 @@ tattooService.create = (tattoo, imageBase64) => new Promise((resolve, reject) =>
     }).catch(error => reject(error || errorMessages.TATTOO_SAVE));
 });
 
-tattooService.update = tattoo => new Promise((resolve, reject) => {
-    Tattoo._findByIdAndUpdate(tattoo._id, appointment, { new: true })
+tattooService.update = (tattooId, tattoo) => new Promise((resolve, reject) => {
+    Tattoo._findByIdAndUpdate(tattooId, appointment, { new: true })
         .then(updatedTattoo => resolve(updatedTattoo))
         .catch(error => reject(error || errorMessages.TATTOO_UPDATE));
 });

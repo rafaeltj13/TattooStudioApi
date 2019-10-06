@@ -32,7 +32,7 @@ tattooController.create = (req, res, next) => {
 };
 
 tattooController.update = (req, res, next) => {
-    tattooService.update(req.body)
+    tattooService.update(req.params.idTattoo, req.body)
         .then(tattoo => res.json(tattoo))
         .catch(e => next(e));
 };

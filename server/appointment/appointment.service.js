@@ -29,8 +29,10 @@ appointmentService.create = appointment => new Promise((resolve, reject) => {
         .catch(error => reject(error || errorMessages.APPOINTMENT_SAVE));
 });
 
-appointmentService.update = appointment => new Promise((resolve, reject) => {
-    Appointment._findByIdAndUpdate(appointment._id, appointment, { new: true })
+appointmentService.update = (appointmentId, appointment) => new Promise((resolve, reject) => {
+    console.log(appointment)
+    
+    Appointment._findByIdAndUpdate(appointmentId, appointment, { new: true })
         .then(updatedAppointment => resolve(updatedAppointment))
         .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
 });

@@ -18,13 +18,14 @@ const convertAppointments = (appointments, type) => {
     return appointments.map(appointment => {
 
         // const image = fs.readFileSync(appointment.tattoo.imagePath);
+        const userType = type === 'artist' ? 'customer' :  'artist';
 
         return {
             id: appointment._id,
             appointmentDate: appointment.appointmentDate,
             price: appointment.price,
             details: {
-                name: appointment[type].name,
+                name: appointment[userType].name,
                 // imageBase64: image.toString('base64')
                 imagePath: appointment.tattoo.imagePath
             }

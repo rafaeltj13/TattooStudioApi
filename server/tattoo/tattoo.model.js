@@ -17,6 +17,7 @@ const TattooSchema = new mongoose.Schema({
         type: Number,
         required: [true, errorMessages.TATTOO_SIZE_REQUIRED]
     },
+    observation: String,
     createdAt: Date,
     updatedAt: Date
 });

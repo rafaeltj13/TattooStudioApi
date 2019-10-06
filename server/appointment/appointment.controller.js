@@ -32,7 +32,7 @@ appointmentController.create = (req, res, next) => {
 };
 
 appointmentController.update = (req, res, next) => {
-    appointmentService.update(req.body)
+    appointmentService.update(req.params.idAppointment, req.body)
         .then(appointment => res.json(appointment))
         .catch(e => next(e));
 };

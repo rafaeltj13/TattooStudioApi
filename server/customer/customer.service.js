@@ -28,8 +28,8 @@ customerService.create = customer => new Promise((resolve, reject) => {
         .catch(error => reject(error || errorMessages.COSTUMER_SAVE));
 });
 
-customerService.update = customer => new Promise((resolve, reject) => {
-    Customer._findByIdAndUpdate(customer._id, customer, { new: true })
+customerService.update = (customerId, customer) => new Promise((resolve, reject) => {
+    Customer._findByIdAndUpdate(customerId, customer, { new: true })
         .then(updatedCustomer => resolve(updatedCustomer))
         .catch(error => reject(error || errorMessages.COSTUMER_UPDATE));
 });

@@ -32,7 +32,7 @@ artistController.create = (req, res, next) => {
 };
 
 artistController.update = (req, res, next) => {
-    artistService.update(req.body)
+    artistService.update(req.params.idArtist, req.body)
         .then(artist => res.json(artist))
         .catch(e => next(e));
 };
