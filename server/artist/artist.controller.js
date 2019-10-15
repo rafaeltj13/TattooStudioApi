@@ -43,4 +43,10 @@ artistController.delete = (req, res, next) => {
         .catch(e => next(e));
 };
 
+artistController.getAppointments = (req, res, next) => {
+    artistService.getAppointments(req.artist._id)
+        .then(appointments => res.json(appointments))
+        .catch(e => next(e));
+};
+
 module.exports = artistController;

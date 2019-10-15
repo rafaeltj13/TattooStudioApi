@@ -23,15 +23,13 @@ appointmentService.getByParams = (params = {}) => new Promise((resolve, reject) 
 });
 
 appointmentService.create = appointment => new Promise((resolve, reject) => {
-    newAppointment = new Appointment(appointment)
+    newAppointment = new Appointment(appointment);
     newAppointment.save()
         .then(savedAppointment => resolve(savedAppointment))
         .catch(error => reject(error || errorMessages.APPOINTMENT_SAVE));
 });
 
 appointmentService.update = (appointmentId, appointment) => new Promise((resolve, reject) => {
-    console.log(appointment)
-    
     Appointment._findByIdAndUpdate(appointmentId, appointment, { new: true })
         .then(updatedAppointment => resolve(updatedAppointment))
         .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));

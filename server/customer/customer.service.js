@@ -44,4 +44,10 @@ customerService.delete = id => new Promise((resolve, reject) => {
         .catch(erro => reject(erro));
 });
 
+customerService.getAppointments = id => new Promise((resolve, reject) => {
+    customerService.getById(id)
+        .then(customers => resolve(customers.schedule.appointments))
+        .catch(error => reject(error || errorMessages.COSTUMER_APPOINTMENTS_NOT_FOUND));
+});
+
 module.exports = customerService;

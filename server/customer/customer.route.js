@@ -13,6 +13,9 @@ router.route('/:idCustomer')
     .patch(expressJwt({ secret: config.jwtSecret }), customerCtrl.update)
     .delete(expressJwt({ secret: config.jwtSecret }), customerCtrl.delete)
 
+router.route('/:idCustomer/appointments')
+    .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getAppointments)
+
 router.param('idCustomer', customerCtrl.load)
 
 module.exports = router;

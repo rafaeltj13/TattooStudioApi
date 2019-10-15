@@ -22,6 +22,7 @@ module.exports = Object.freeze({
     CUSTOMER_PASSWORD_INVALID: 'A senha do Cliente é inválida.',
     CUSTOMER_PHONE_REQUIRED: 'O telefone do Cliente é obrigatório.',
     CUSTOMER_PHONE_INVALID: 'O número de telefone ({VALUE}) do Cliente é inválido.',
+    COSTUMER_APPOINTMENTS_NOT_FOUND: 'Os horários do cliente não foram encontrados.',
 
     //Artist
     ARTIST_NOT_FOUND: 'Tatuador não encontrado.',
@@ -41,6 +42,7 @@ module.exports = Object.freeze({
     ARTIST_PASSWORD_INVALID: 'A senha do Tatuador é inválida.',
     ARTIST_PHONE_REQUIRED: 'O telefone do Tatuador é obrigatório.',
     ARTIST_PHONE_INVALID: 'O número de telefone ({VALUE}) do Tatuador é inválido.',
+    ARITST_APPOINTMENTS_NOT_FOUND: 'Os horários do cliente não foram encontrados.',
 
     ///Tattoo
     TATTOO_NOT_FOUND: 'A tatuagem não foi encontrada.',
@@ -58,5 +60,13 @@ module.exports = Object.freeze({
     APPOINTMENT_SAVE: 'Não foi possível salvar o Orçamento.',
     APPOINTMENT_UPDATE: 'Não foi possível atualizar o Orçamento.',
     APPOINTMENT_DELETE: 'Não foi possível deletar o Orçamento.',
-    APPOINTMENT_STATUS_REQUIRED: 'O estado do orçamento é obrigatório.'
+    APPOINTMENT_STATUS_REQUIRED: 'O estado do orçamento é obrigatório.',
+
+    //Schedule
+    SCHEDULE_NOT_FOUND: 'O calendário não foi encontrada.',
+    SCHEDULE_INVALID_ID: 'O ID do calendário é inválido.',
+    SCHEDULE_SAVE: 'Não foi possível salvar o calendário.',
+    SCHEDULE_UPDATE: 'Não foi possível atualizar o calendário.',
+    SCHEDULE_DELETE: 'Não foi possível deletar o calendário.',
+    SCHEDULE_DATE_REQUIRED: 'A data do calendário é obrigatória.'
 });

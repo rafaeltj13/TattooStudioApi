@@ -13,6 +13,9 @@ router.route('/:idArtist')
     .patch(expressJwt({ secret: config.jwtSecret }), artistCtrl.update)
     .delete(expressJwt({ secret: config.jwtSecret }), artistCtrl.delete)
 
+router.route('/:idArtist/appointments')
+    .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAppointments)
+
 router.param('idArtist', artistCtrl.load)
 
 module.exports = router;

@@ -6,8 +6,9 @@ const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator');
+const Schema = mongoose.Schema;
 
-const CustomerSchema = new mongoose.Schema({
+const CustomerSchema = new Schema({
     username: {
         type: String,
         required: true
@@ -45,11 +46,17 @@ const CustomerSchema = new mongoose.Schema({
         trim: true,
         required: [true, errorMessages.CUSTOMER_PHONE_REQUIRED]
     },
-    schedule: String,
+    schedule: {
+        type: Schema.Types.ObjectId,
+        ref: 'Schedule',
+        autopopulate: true
+    },
     photo: String,
     createdAt: Date,
     updatedAt: Date
 });
+
+CustomerSchema.plugin(require('mongoose-autopopulate'));
 
 CustomerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);

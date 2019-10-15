@@ -44,4 +44,10 @@ artistService.delete = id => new Promise((resolve, reject) => {
         .catch(erro => reject(erro));
 });
 
+artistService.getAppointments = id => new Promise((resolve, reject) => {
+    artistService.getById(id)
+        .then(customers => resolve(artist.schedule.appointments))
+        .catch(error => reject(error || errorMessages.ARITST_APPOINTMENTS_NOT_FOUND));
+});
+
 module.exports = artistService;

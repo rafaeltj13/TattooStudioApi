@@ -23,14 +23,14 @@ const TattooSchema = new mongoose.Schema({
 });
 
 TattooSchema.pre('save', next => {
-    this.dataCriacao = Date.now();
-    this.dataEdicao = Date.now();
+    this.createdAt = Date.now();
+    this.updatedAt = Date.now();
     next();
 });
 
 const preUpdate = (tattoo, next) => {
-    delete tattoo.dataCriacao;
-    tattoo.dataEdicao = Date.now();
+    delete tattoo.createdAt;
+    tattoo.updatedAt = Date.now();
     next && next();
 };
 

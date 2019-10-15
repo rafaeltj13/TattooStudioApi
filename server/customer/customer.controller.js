@@ -43,4 +43,10 @@ customerController.delete = (req, res, next) => {
         .catch(e => next(e));
 };
 
+customerController.getAppointments = (req, res, next) => {
+    customerService.getAppointments(req.customer._id)
+        .then(appointments => res.json(appointments))
+        .catch(e => next(e));
+};
+
 module.exports = customerController;
