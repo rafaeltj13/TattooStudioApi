@@ -41,8 +41,6 @@ const CustomerSchema = new Schema({
     },
     phone: {
         type: String,
-        /* XX9XXXXXXXX ou XXXXXXXXXX */
-        // match: [constants.USER.PHONE_NO_REGEX, errorMessages.CUSTOMER_PHONE_INVALID],
         trim: true,
         required: [true, errorMessages.CUSTOMER_PHONE_REQUIRED]
     },

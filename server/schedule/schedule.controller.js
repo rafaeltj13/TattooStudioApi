@@ -43,4 +43,10 @@ scheduleController.delete = (req, res, next) => {
         .catch(e => next(e));
 };
 
+scheduleController.getAvailability = (req, res, next) => {
+    scheduleService.getAvailability(req.schedule._id, req.query.date, req.query.interval)
+        .then(availableSchedule => res.json(availableSchedule))
+        .catch(e => next(e));
+};
+
 module.exports = scheduleController;

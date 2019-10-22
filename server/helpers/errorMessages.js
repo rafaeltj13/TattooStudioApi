@@ -53,7 +53,7 @@ module.exports = Object.freeze({
     TATTOO_SAVE: 'Não foi possível salvar a Tatuagem.',
     TATTOO_UPDATE: 'Não foi possível atualizar a Tatuagem.',
     TATTOO_DELETE: 'Não foi possível deletar a Tatuagem.',
-
+ 
     //Appointment
     APPOINTMENT_NOT_FOUND: 'O orçamento não foi encontrada.',
     APPOINTMENT_INVALID_ID: 'O ID do orçamento é inválido.',
@@ -68,5 +68,9 @@ module.exports = Object.freeze({
     SCHEDULE_SAVE: 'Não foi possível salvar o calendário.',
     SCHEDULE_UPDATE: 'Não foi possível atualizar o calendário.',
     SCHEDULE_DELETE: 'Não foi possível deletar o calendário.',
-    SCHEDULE_DATE_REQUIRED: 'A data do calendário é obrigatória.'
+    SCHEDULE_AVAILABLE_HOURS: 'Não foi possível resgatar as horas disponíveis',
+    SCHEDULE_DATE_REQUIRED: 'A data do calendário é obrigatória.',
+    SCHEDULE_ATUAL_SESSION_REQUIRED: 'A sessão atual do agendamento é obirgatória',
+    SCHEDULE_START_DATE_REQUIRED: 'A hora inicial do agendamento é obirgatória',
+    SCHEDULE_END_DATE_REQUIRED: 'A hora final do agendamento é obirgatória'
 });

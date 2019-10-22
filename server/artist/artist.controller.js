@@ -49,4 +49,6 @@ artistController.getAppointments = (req, res, next) => {
         .catch(e => next(e));
 };
 
+artistController.getSchedule = (req, res) => res.json(req.artist.schedule._id);
+
 module.exports = artistController;

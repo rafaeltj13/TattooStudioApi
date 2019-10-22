@@ -24,7 +24,15 @@ artistService.getByParams = (params = {}) => new Promise((resolve, reject) => {
 artistService.create = artist => new Promise((resolve, reject) => {
     newArtist = new Artist(artist)
     newArtist.save()
-        .then(savedArtist => resolve(savedArtist))
+        .then(savedArtist => {
+            scheduleService.create()
+                .then(schedule => {
+                    artistService.update(savedArtist._id, { schedule: schedule._id })
+                        .then(updatedArtist => resolve(updatedArtist))
+                        .catch(e => next(e));
+                })
+                .catch(e => next(e));
+        })
         .catch(error => reject(error || errorMessages.ARTIST_SAVE));
 });
 
@@ -46,8 +54,14 @@ artistService.delete = id => new Promise((resolve, reject) => {
 
 artistService.getAppointments = id => new Promise((resolve, reject) => {
     artistService.getById(id)
-        .then(customers => resolve(artist.schedule.appointments))
+        .then(artist => resolve(artist.schedule.appointments))
         .catch(error => reject(error || errorMessages.ARITST_APPOINTMENTS_NOT_FOUND));
+});
+
+artistService.getSchedule = artistId => new Promise((resolve, reject) => {
+    artistService.getById(artistId)
+        .then(artist => resolve(artist.schedule._id))
+        .catch(erro => reject(erro));
 });
 
 module.exports = artistService;

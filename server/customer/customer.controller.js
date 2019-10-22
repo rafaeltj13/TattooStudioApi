@@ -49,4 +49,6 @@ customerController.getAppointments = (req, res, next) => {
         .catch(e => next(e));
 };
 
+customerController.getSchedule = (req, res) => res.json(req.customer.schedule._id);
+
 module.exports = customerController;

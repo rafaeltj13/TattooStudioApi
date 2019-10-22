@@ -16,6 +16,9 @@ router.route('/:idArtist')
 router.route('/:idArtist/appointments')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAppointments)
 
+router.route('/:idArtist/schedule')
+    .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getSchedule)
+
 router.param('idArtist', artistCtrl.load)
 
 module.exports = router;

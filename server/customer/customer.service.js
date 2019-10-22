@@ -1,5 +1,6 @@
 const Customer = require('./customer.model');
 const errorMessages = require('../helpers/errorMessages');
+const scheduleService = require('../schedule/schedule.service');
 
 const customerService = {};
 
@@ -24,7 +25,15 @@ customerService.getByParams = (params = {}) => new Promise((resolve, reject) => 
 customerService.create = customer => new Promise((resolve, reject) => {
     newCustomer = new Customer(customer)
     newCustomer.save()
-        .then(savedCustomer => resolve(savedCustomer))
+        .then(savedCustomer => {
+            scheduleService.create()
+                .then(schedule => {
+                    customerService.update(savedCustomer._id, { schedule: schedule._id })
+                        .then(updatedCustomer => resolve(updatedCustomer))
+                        .catch(e => next(e));
+                })
+                .catch(e => next(e));
+        })
         .catch(error => reject(error || errorMessages.COSTUMER_SAVE));
 });
 
@@ -46,8 +55,14 @@ customerService.delete = id => new Promise((resolve, reject) => {
 
 customerService.getAppointments = id => new Promise((resolve, reject) => {
     customerService.getById(id)
-        .then(customers => resolve(customers.schedule.appointments))
+        .then(customer => resolve(customer.schedule.appointments))
         .catch(error => reject(error || errorMessages.COSTUMER_APPOINTMENTS_NOT_FOUND));
+});
+
+customerService.getSchedule = customerId => new Promise((resolve, reject) => {
+    customerService.getById(customerId)
+        .then(customer => resolve(customer.schedule._id))
+        .catch(erro => reject(erro));
 });
 
 module.exports = customerService;

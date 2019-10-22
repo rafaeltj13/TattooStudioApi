@@ -29,7 +29,7 @@ scheduleService.create = schedule => new Promise((resolve, reject) => {
 });
 
 scheduleService.update = (scheduleId, newAppointment) => new Promise((resolve, reject) => {
-    Schedule._findByIdAndUpdate(scheduleId, newAppointment)
+    Schedule._findByIdAndUpdate(scheduleId, newAppointment, { new: true })
         .then(updatedSchedule => resolve(updatedSchedule))
         .catch(error => reject(error || errorMessages.SCHEDULE_UPDATE));
 });
@@ -42,6 +42,12 @@ scheduleService.delete = id => new Promise((resolve, reject) => {
                 .catch(error => reject(error || errorMessages.SCHEDULE_DELETE));
         })
         .catch(erro => reject(erro));
+});
+
+scheduleService.getAvailability = (scheduleId, date, interval) => new Promise((resolve, reject) => {
+    scheduleService._getAvailableHours(scheduleId, date, interval)
+        .then(availableHours => resolve(availableHours))
+        .catch(error => reject(error || errorMessages.SCHEDULE_AVAILABLE_HOURS));
 });
 
 module.exports = scheduleService;

@@ -13,6 +13,9 @@ router.route('/:idSchedule')
     .patch(expressJwt({ secret: config.jwtSecret }), scheduleCtrl.update)
     .delete(expressJwt({ secret: config.jwtSecret }), scheduleCtrl.delete);
 
+router.route('/:idSchedule/availability')
+    .get(expressJwt({ secret: config.jwtSecret }), scheduleCtrl.getAvailability)
+
 router.param('idSchedule', scheduleCtrl.load)
 
 module.exports = router;
