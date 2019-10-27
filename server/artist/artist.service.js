@@ -1,5 +1,6 @@
 const Artist = require('./artist.model');
 const errorMessages = require('../helpers/errorMessages');
+const scheduleService = require('../schedule/schedule.service');
 
 const artistService = {};
 
@@ -60,7 +61,7 @@ artistService.getAppointments = id => new Promise((resolve, reject) => {
 
 artistService.getSchedule = artistId => new Promise((resolve, reject) => {
     artistService.getById(artistId)
-        .then(artist => resolve(artist.schedule._id))
+        .then(artist => resolve(artist.schedule))
         .catch(erro => reject(erro));
 });
 

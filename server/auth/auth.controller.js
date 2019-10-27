@@ -22,7 +22,8 @@ authController.signinCustomer = (req, res, next) => {
         token,
         id: customer._id,
         username: customer.username,
-        type: 'customer'
+        type: 'customer',
+        scheduleId: customer.schedule
       });
     } else {
       const err = new APIError(errorMessages.COSTUMER_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);
@@ -48,7 +49,8 @@ authController.signinArtist = (req, res, next) => {
         token,
         id: artist._id,
         username: artist.username,
-        type: 'artist'
+        type: 'artist',
+        scheduleId: artist.schedule
       });
     } else {
       const err = new APIError(errorMessages.ARTIST_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);

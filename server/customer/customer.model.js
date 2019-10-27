@@ -47,14 +47,14 @@ const CustomerSchema = new Schema({
     schedule: {
         type: Schema.Types.ObjectId,
         ref: 'Schedule',
-        autopopulate: true
+        // autopopulate: true
     },
     photo: String,
     createdAt: Date,
     updatedAt: Date
 });
 
-CustomerSchema.plugin(require('mongoose-autopopulate'));
+// CustomerSchema.plugin(require('mongoose-autopopulate'));
 
 CustomerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);

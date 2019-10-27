@@ -13,7 +13,7 @@ const AppointmentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-  required: [true, errorMessages.APPOINTMENT_STATUS_REQUIRED]
+    required: [true, errorMessages.APPOINTMENT_STATUS_REQUIRED]
   },
   totalDuration: Number,
   sessions: Number,

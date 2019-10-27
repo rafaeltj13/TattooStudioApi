@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
-const { getInitialAvailableHoursInterval, getAvailableHours } = require('../services/intervalService');
+const { getInitialAvailableHoursInterval, getAvailableHours, getAvailableIntervals } = require('../services/intervalService');
 const errorMessages = require('../helpers/errorMessages')
 const Schema = mongoose.Schema;
 
@@ -122,19 +122,42 @@ ScheduleSchema.statics._getAvailableHours = function (scheduleId, date, interval
         .then(schedule => {
             if (schedule) {
 
-                const morning = [8,12];
-                const afternoon = [14,18];
-                const night = [20,22];
+                const morning = [8, 12];
+                const afternoon = [14, 18];
+                const night = [20, 22];
+
+                console.log(date)
 
                 const initialAvailableHours = getInitialAvailableHoursInterval(morning, afternoon, night);
                 const availableHours = getAvailableHours(initialAvailableHours, schedule.appointments, date);
-                const availableIntervals = getAvailableIntervals(availableHours, interval);
+                const availableIntervals = getAvailableIntervals(availableHours, parseInt(interval));
 
                 return availableIntervals;
 
             }
             const err = new APIError(errorMessages.SCHEDULE_NOT_FOUND, httpStatus.NOT_FOUND);
             return Promise.reject(err);
+        })
+        .catch(erro => {
+            console.log(erro)
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.SCHEDULE_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
+};
+
+ScheduleSchema.statics._updateDates = function (scheduleId, appointmentId, dates) {
+    return this.findById(scheduleId)
+        .exec()
+        .then(schedule => {
+            schedule.appointments.forEach(appointment => {
+                if (appointment.appointment._id.toString() === appointmentId) {
+                    preUpdate(schedule);
+                    dates.forEach(date => appointment.dates.push(date))
+                }
+            });
+            return this.findByIdAndUpdate(scheduleId, schedule, { new: true })
         })
         .catch(erro => {
             if (!(erro instanceof APIError)) {

@@ -47,13 +47,23 @@ appointmentService.create = (appointment, customerId, artistId) => new Promise((
 
             Promise.all([customerPromise, artistPromise])
                 .then(() => resolve(savedAppointment))
+                .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
         })
         .catch(error => reject(error || errorMessages.APPOINTMENT_SAVE));
 });
 
 appointmentService.update = (appointmentId, appointment) => new Promise((resolve, reject) => {
     Appointment._findByIdAndUpdate(appointmentId, appointment, { new: true })
-        .then(updatedAppointment => resolve(updatedAppointment))
+        .then(updatedAppointment => {
+            if (appointment.details)
+                scheduleService.updateDates(appointmentId,
+                    appointment.details.customerScheduleId,
+                    appointment.details.artistScheduleId,
+                    appointment.dates)
+                    .then(() => resolve(updatedAppointment))
+                    .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+            else resolve(updatedAppointment)
+        })
         .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
 });
 

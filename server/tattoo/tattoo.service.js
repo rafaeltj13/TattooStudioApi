@@ -1,6 +1,6 @@
 const Tattoo = require('./tattoo.model');
 const errorMessages = require('../helpers/errorMessages');
-const imageService = require('../helpers/imageService');
+const imageService = require('../services/imageService');
 
 const tattooService = {};
 

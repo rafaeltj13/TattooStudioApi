@@ -45,9 +45,23 @@ scheduleService.delete = id => new Promise((resolve, reject) => {
 });
 
 scheduleService.getAvailability = (scheduleId, date, interval) => new Promise((resolve, reject) => {
-    scheduleService._getAvailableHours(scheduleId, date, interval)
+    Schedule._getAvailableHours(scheduleId, date, interval)
         .then(availableHours => resolve(availableHours))
         .catch(error => reject(error || errorMessages.SCHEDULE_AVAILABLE_HOURS));
+});
+
+scheduleService.updateDates = (appointmentId, customerScheduleId, artistScheduleId, dates) => new Promise((resolve, reject) => {
+    const customerPromise = Schedule._updateDates(customerScheduleId, appointmentId, dates)
+        .then()
+        .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+
+    const artistPromise = Schedule._updateDates(artistScheduleId, appointmentId, dates)
+        .then()
+        .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+
+    Promise.all([customerPromise, artistPromise])
+        .then(() => resolve())
+        .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
 });
 
 module.exports = scheduleService;

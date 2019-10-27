@@ -48,7 +48,7 @@ const ArtistSchema = new Schema({
     schedule: {
         type: Schema.Types.ObjectId,
         ref: 'Schedule',
-        autopopulate: true
+        // autopopulate: true
     },
     studio: String,
     rating: Number,
@@ -57,7 +57,7 @@ const ArtistSchema = new Schema({
     updatedAt: Date
 });
 
-ArtistSchema.plugin(require('mongoose-autopopulate'));
+// ArtistSchema.plugin(require('mongoose-autopopulate'));
 
 ArtistSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);

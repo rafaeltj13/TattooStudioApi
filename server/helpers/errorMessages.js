@@ -63,7 +63,7 @@ module.exports = Object.freeze({
     APPOINTMENT_STATUS_REQUIRED: 'O estado do orçamento é obrigatório.',
 
     //Schedule
-    SCHEDULE_NOT_FOUND: 'O calendário não foi encontrada.',
+    SCHEDULE_NOT_FOUND: 'O calendário não foi encontrado.',
     SCHEDULE_INVALID_ID: 'O ID do calendário é inválido.',
     SCHEDULE_SAVE: 'Não foi possível salvar o calendário.',
     SCHEDULE_UPDATE: 'Não foi possível atualizar o calendário.',

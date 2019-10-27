@@ -61,7 +61,7 @@ customerService.getAppointments = id => new Promise((resolve, reject) => {
 
 customerService.getSchedule = customerId => new Promise((resolve, reject) => {
     customerService.getById(customerId)
-        .then(customer => resolve(customer.schedule._id))
+        .then(customer => resolve(customer.schedule))
         .catch(erro => reject(erro));
 });
 

@@ -19,11 +19,11 @@ intervalService.getInitialAvailableHoursInterval = (morning, afternoon, night) =
 };
 
 intervalService.getAvailableHours = (initialAvailableHours, appointments, date) => {
-    const availableHours;
+    let availableHours = initialAvailableHours;
 
     appointments.forEach(appointment => {
         appointment.dates.forEach(appointmentDate => {
-            if (appointmentDate.date.getTime() === date.getTime()) {
+            if (new Date(appointmentDate.date).setHours(0, 0, 0, 0) === new Date(date).setHours(0, 0, 0, 0)) {
                 availableHours = initialAvailableHours.filter(element => !(appointmentDate.start <= element[0] && appointmentDate.end >= element[1]))
             }
         })
@@ -40,14 +40,14 @@ intervalService.getAvailableIntervals = (availableHours, interval) => {
     availableHours.forEach((hourInterval, index) => {
         let initialInterval = hourInterval[0];
 
-        for (i = index; i < availableHours.length; i++) {
+        for (i = index; i < availableHours.length - 1; i++) {
             if (!(availableHours[i][1] === availableHours[i + 1][0])) {
                 initialInterval = availableHours[i + 1][0];
                 break;
             }
 
             if (availableHours[i + 1][1] - initialInterval === interval) {
-                availableHours.push([initialInterval, availableHours[i + 1][1]])
+                availableIntervals.push([initialInterval, availableHours[i + 1][1]])
             }
         }
     });

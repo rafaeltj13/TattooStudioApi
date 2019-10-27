@@ -1,4 +1,5 @@
 const artistService = require('./artist.service');
+const scheduleService = require('../schedule/schedule.service');
 
 const artistController = {};
 
@@ -50,5 +51,11 @@ artistController.getAppointments = (req, res, next) => {
 };
 
 artistController.getSchedule = (req, res) => res.json(req.artist.schedule._id);
+
+artistController.getAvailableHours = (req, res, next) => {
+    scheduleService.getAvailability(req.artist.schedule, req.query.date, req.query.interval)
+        .then(availableHours => res.json(availableHours))
+        .catch(e => next(e));
+};
 
 module.exports = artistController;
