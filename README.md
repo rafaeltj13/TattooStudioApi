@@ -1,8 +1,8 @@
-# QConveniente REST API
+# TattooStudio REST API
 
 ## Overview
 
-REST API of QConveniente, built with Node.js, Express.Js and MongoDB.
+REST API of TattooStudio, built with Node.js, Express.Js and MongoDB.
 
 Based on this [boilerplate](https://github.com/kunalkapadia/express-mongoose-es6-rest-api).  
 
