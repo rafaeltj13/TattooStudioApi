@@ -11,6 +11,7 @@ customerService.getAll = (params = {}) => new Promise((resolve, reject) => {
 });
 
 customerService.getById = id => new Promise((resolve, reject) => {
+    console.log('????????????')
     Customer.getById(id)
         .then(customer => resolve(customer))
         .catch(error => reject(error || errorMessages.COSTUMER_NOT_FOUND));
@@ -62,6 +63,12 @@ customerService.getAppointments = id => new Promise((resolve, reject) => {
 customerService.getSchedule = customerId => new Promise((resolve, reject) => {
     customerService.getById(customerId)
         .then(customer => resolve(customer.schedule))
+        .catch(erro => reject(erro));
+});
+
+customerService.addTattoo = (customerId, tattoId) => new Promise((resolve, reject) => {
+    Customer._addTattoo(customerId, tattoId)
+        .then(customer => resolve(customer))
         .catch(erro => reject(erro));
 });
 

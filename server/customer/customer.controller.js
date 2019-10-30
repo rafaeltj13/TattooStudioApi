@@ -51,4 +51,10 @@ customerController.getAppointments = (req, res, next) => {
 
 customerController.getSchedule = (req, res) => res.json(req.customer.schedule._id);
 
+customerController.addTattoo = (req, res, next) => {
+    customerService.addTattoo(req.params.idCustomer, req.body.tattooId)
+        .then(customer => res.json(customer))
+        .catch(e => next(e));
+};
+
 module.exports = customerController;

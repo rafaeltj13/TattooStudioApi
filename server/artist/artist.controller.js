@@ -58,4 +58,10 @@ artistController.getAvailableHours = (req, res, next) => {
         .catch(e => next(e));
 };
 
+artistController.addTattoo = (req, res, next) => {
+    artistService.addTattoo(req.params.idArtist, req.body.tattooId)
+        .then(customer => res.json(customer))
+        .catch(e => next(e));
+};
+
 module.exports = artistController;

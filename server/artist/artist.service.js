@@ -65,4 +65,10 @@ artistService.getSchedule = artistId => new Promise((resolve, reject) => {
         .catch(erro => reject(erro));
 });
 
+artistService.addTattoo = (artistId, tattoId) => new Promise((resolve, reject) => {
+    Artist._addTattoo(artistId, tattoId)
+        .then(artist => resolve(artist))
+        .catch(erro => reject(erro));
+});
+
 module.exports = artistService;

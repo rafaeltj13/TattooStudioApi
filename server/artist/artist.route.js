@@ -22,6 +22,9 @@ router.route('/:idArtist/schedule')
 router.route('/:idArtist/availableHours')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAvailableHours)
 
+router.route('/:idArtist/tattoo')
+    .post(expressJwt({ secret: config.jwtSecret }), artistCtrl.addTattoo)
+
 router.param('idArtist', artistCtrl.load)
 
 module.exports = router;
