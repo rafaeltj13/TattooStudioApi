@@ -57,4 +57,6 @@ customerController.addTattoo = (req, res, next) => {
         .catch(e => next(e));
 };
 
+customerController.getTattoos = (req, res) => res.json(req.customer.tattoos);
+
 module.exports = customerController;

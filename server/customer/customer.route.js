@@ -20,6 +20,7 @@ router.route('/:idCustomer/schedule')
     .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getSchedule)
 
 router.route('/:idCustomer/tattoo')
+    .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getTattoos)
     .post(expressJwt({ secret: config.jwtSecret }), customerCtrl.addTattoo)
 
 router.param('idCustomer', customerCtrl.load)

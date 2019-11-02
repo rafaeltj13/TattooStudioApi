@@ -52,6 +52,7 @@ const ArtistSchema = new Schema({
     tattoos: [{
         type: Schema.Types.ObjectId,
         ref: 'Tattoo',
+        autopopulate: true
     }],
     studio: String,
     rating: {
@@ -59,11 +60,15 @@ const ArtistSchema = new Schema({
         default: 3.5
     },
     specialty: String,
+    experienceYears: String,
+    trace: String,
     photo: String,
     notificationToken: String,
     createdAt: Date,
     updatedAt: Date
 });
+
+ArtistSchema.plugin(require('mongoose-autopopulate'));
 
 ArtistSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);

@@ -51,12 +51,15 @@ const CustomerSchema = new Schema({
     tattoos: [{
         type: Schema.Types.ObjectId,
         ref: 'Tattoo',
+        autopopulate: true
     }],
     notificationToken: String,
     photo: String,
     createdAt: Date,
     updatedAt: Date
 });
+
+CustomerSchema.plugin(require('mongoose-autopopulate'));
 
 CustomerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);

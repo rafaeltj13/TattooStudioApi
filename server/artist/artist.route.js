@@ -23,6 +23,7 @@ router.route('/:idArtist/availableHours')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAvailableHours)
 
 router.route('/:idArtist/tattoo')
+    .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getTattoos)
     .post(expressJwt({ secret: config.jwtSecret }), artistCtrl.addTattoo)
 
 router.param('idArtist', artistCtrl.load)
