@@ -71,4 +71,10 @@ artistService.addTattoo = (artistId, tattoId) => new Promise((resolve, reject) =
         .catch(erro => reject(erro));
 });
 
+artistService.getFeaturedArtists = (params = {}) => new Promise((resolve, reject) => {
+    Artist.find(params).sort('-rating').limit(3)
+        .then(artists => resolve(artists))
+        .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
+});
+
 module.exports = artistService;

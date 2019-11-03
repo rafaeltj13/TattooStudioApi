@@ -53,6 +53,10 @@ const CustomerSchema = new Schema({
         ref: 'Tattoo',
         autopopulate: true
     }],
+    lastArtistVisited: {
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
+    },
     notificationToken: String,
     photo: String,
     createdAt: Date,

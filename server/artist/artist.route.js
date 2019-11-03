@@ -8,6 +8,9 @@ router.route('/')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAll)
     .post(artistCtrl.create);
 
+router.route('/featured')
+    .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getFeaturedArtists)
+
 router.route('/:idArtist')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getById)
     .patch(expressJwt({ secret: config.jwtSecret }), artistCtrl.update)

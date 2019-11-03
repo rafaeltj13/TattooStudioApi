@@ -59,4 +59,10 @@ customerController.addTattoo = (req, res, next) => {
 
 customerController.getTattoos = (req, res) => res.json(req.customer.tattoos);
 
+customerController.getLastVisit = (req, res, next) => {
+    customerService.getLastVisit(req.customer.lastArtistVisited)
+        .then(artist => res.json(artist))
+        .catch(e => next(e));
+};
+
 module.exports = customerController;

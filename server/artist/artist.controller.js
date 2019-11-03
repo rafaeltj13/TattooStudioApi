@@ -66,4 +66,10 @@ artistController.addTattoo = (req, res, next) => {
 
 artistController.getTattoos = (req, res) => res.json(req.artist.tattoos);
 
+artistController.getFeaturedArtists = (req, res, next) => {
+    artistService.getFeaturedArtists(req.query)
+        .then(artists => res.json(artists))
+        .catch(e => next(e));
+};
+
 module.exports = artistController;

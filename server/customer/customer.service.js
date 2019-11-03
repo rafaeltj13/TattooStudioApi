@@ -1,6 +1,7 @@
 const Customer = require('./customer.model');
 const errorMessages = require('../helpers/errorMessages');
 const scheduleService = require('../schedule/schedule.service');
+const artstService = require('../artist/artist.service');
 
 const customerService = {};
 
@@ -69,6 +70,14 @@ customerService.getSchedule = customerId => new Promise((resolve, reject) => {
 customerService.addTattoo = (customerId, tattoId) => new Promise((resolve, reject) => {
     Customer._addTattoo(customerId, tattoId)
         .then(customer => resolve(customer))
+        .catch(erro => reject(erro));
+});
+
+customerService.getLastVisit = artistId => new Promise((resolve, reject) => {
+    if (!artistId) resolve({});
+
+    artstService.getById(artistId)
+        .then(artist => resolve(artist))
         .catch(erro => reject(erro));
 });
 
