@@ -6,8 +6,9 @@ const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator');
+const Schema = mongoose.Schema;
 
-const CustomerSchema = new mongoose.Schema({
+const CustomerSchema = new Schema({
     username: {
         type: String,
         required: true
@@ -40,16 +41,29 @@ const CustomerSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        /* XX9XXXXXXXX ou XXXXXXXXXX */
-        // match: [constants.USER.PHONE_NO_REGEX, errorMessages.CUSTOMER_PHONE_INVALID],
         trim: true,
         required: [true, errorMessages.CUSTOMER_PHONE_REQUIRED]
     },
-    schedule: String,
+    schedule: {
+        type: Schema.Types.ObjectId,
+        ref: 'Schedule',
+    },
+    tattoos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tattoo',
+        autopopulate: true
+    }],
+    lastArtistVisited: {
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
+    },
+    notificationToken: String,
     photo: String,
     createdAt: Date,
     updatedAt: Date
 });
+
+CustomerSchema.plugin(require('mongoose-autopopulate'));
 
 CustomerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
@@ -120,6 +134,21 @@ CustomerSchema.statics.getByUserName = function (username) {
 CustomerSchema.statics._findByIdAndUpdate = function (idCustomer, customer, options) {
     preUpdate(customer);
     return this.findByIdAndUpdate(idCustomer, customer, options)
+};
+
+CustomerSchema.statics._addTattoo = function (customerId, tattooId) {
+    return this.findById(customerId)
+        .exec()
+        .then(customer => {
+            customer.tattoos.push(tattooId);
+            return this.findByIdAndUpdate(customerId, customer, { new: true });
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.CUSTOMER_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
 };
 
 module.exports = mongoose.model('Customer', CustomerSchema);

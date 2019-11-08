@@ -32,7 +32,7 @@ customerController.create = (req, res, next) => {
 };
 
 customerController.update = (req, res, next) => {
-    customerService.update(req.body)
+    customerService.update(req.params.idCustomer, req.body)
         .then(customer => res.json(customer))
         .catch(e => next(e));
 };
@@ -40,6 +40,28 @@ customerController.update = (req, res, next) => {
 customerController.delete = (req, res, next) => {
     customerService.delete(req.customer._id)
         .then(customer => res.json(customer))
+        .catch(e => next(e));
+};
+
+customerController.getAppointments = (req, res, next) => {
+    customerService.getAppointments(req.customer._id)
+        .then(appointments => res.json(appointments))
+        .catch(e => next(e));
+};
+
+customerController.getSchedule = (req, res) => res.json(req.customer.schedule._id);
+
+customerController.addTattoo = (req, res, next) => {
+    customerService.addTattoo(req.params.idCustomer, req.body.tattooId)
+        .then(customer => res.json(customer))
+        .catch(e => next(e));
+};
+
+customerController.getTattoos = (req, res) => res.json(req.customer.tattoos);
+
+customerController.getLastVisit = (req, res, next) => {
+    customerService.getLastVisit(req.customer.lastArtistVisited)
+        .then(artist => res.json(artist))
         .catch(e => next(e));
 };
 

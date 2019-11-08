@@ -17,19 +17,20 @@ const TattooSchema = new mongoose.Schema({
         type: Number,
         required: [true, errorMessages.TATTOO_SIZE_REQUIRED]
     },
+    observation: String,
     createdAt: Date,
     updatedAt: Date
 });
 
 TattooSchema.pre('save', next => {
-    this.dataCriacao = Date.now();
-    this.dataEdicao = Date.now();
+    this.createdAt = Date.now();
+    this.updatedAt = Date.now();
     next();
 });
 
 const preUpdate = (tattoo, next) => {
-    delete tattoo.dataCriacao;
-    tattoo.dataEdicao = Date.now();
+    delete tattoo.createdAt;
+    tattoo.updatedAt = Date.now();
     next && next();
 };
 

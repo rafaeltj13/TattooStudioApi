@@ -3,7 +3,8 @@ const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const config = require('../../config/config');
 const errorMessages = require('../helpers/errorMessages');
-const Customer = require('../customer/customer.model')
+const Customer = require('../customer/customer.model');
+const Artist = require('../artist/artist.model');
 
 const authController = {};
 
@@ -20,7 +21,9 @@ authController.signinCustomer = (req, res, next) => {
       return res.json({
         token,
         id: customer._id,
-        username: customer.username
+        username: customer.username,
+        type: 'customer',
+        scheduleId: customer.schedule
       });
     } else {
       const err = new APIError(errorMessages.COSTUMER_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);
@@ -45,13 +48,16 @@ authController.signinArtist = (req, res, next) => {
       return res.json({
         token,
         id: artist._id,
-        username: artist.username
+        username: artist.username,
+        type: 'artist',
+        scheduleId: artist.schedule
       });
     } else {
       const err = new APIError(errorMessages.ARTIST_PASSWORD_INVALID, httpStatus.UNAUTHORIZED);
       return next(err);
     }
   }).catch(error => {
+    console.log(error)
     const err = new APIError(error, httpStatus.BAD_REQUEST);
     return next(err);
   })

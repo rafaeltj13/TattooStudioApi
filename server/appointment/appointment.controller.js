@@ -26,13 +26,13 @@ appointmentController.getByParams = (req, res, next) => {
 };
 
 appointmentController.create = (req, res, next) => {
-    appointmentService.create(req.body)
+    appointmentService.create(req.body, req.body.customer, req.body.artist)
         .then(appointment => res.json(appointment))
         .catch(e => next(e));
 };
 
 appointmentController.update = (req, res, next) => {
-    appointmentService.update(req.body)
+    appointmentService.update(req.params.idAppointment, req.body)
         .then(appointment => res.json(appointment))
         .catch(e => next(e));
 };

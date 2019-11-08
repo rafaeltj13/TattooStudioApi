@@ -1,6 +1,9 @@
 const Appointment = require('./appointment.model');
 const errorMessages = require('../helpers/errorMessages');
 const { convertAppointments } = require('../helpers/utils');
+const customerService = require('../customer/customer.service');
+const artistService = require('../artist/artist.service');
+const scheduleService = require('../schedule/schedule.service');
 
 const appointmentService = {};
 
@@ -22,16 +25,45 @@ appointmentService.getByParams = (params = {}) => new Promise((resolve, reject) 
         .catch(error => reject(error || errorMessages.APPOINTMENT_NOT_FOUND));
 });
 
-appointmentService.create = appointment => new Promise((resolve, reject) => {
-    newAppointment = new Appointment(appointment)
+appointmentService.create = (appointment, customerId, artistId) => new Promise((resolve, reject) => {
+    newAppointment = new Appointment(appointment);
     newAppointment.save()
-        .then(savedAppointment => resolve(savedAppointment))
+        .then(savedAppointment => {
+            const customerPromise = customerService.getSchedule(customerId)
+                .then(scheduleId => scheduleService.update(scheduleId, {
+                    appointment: savedAppointment._id,
+                    customer: customerId,
+                    artist: artistId
+                }))
+                .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+
+            const artistPromise = artistService.getSchedule(artistId)
+                .then(scheduleId => scheduleService.update(scheduleId, {
+                    appointment: savedAppointment._id,
+                    customer: customerId,
+                    artist: artistId
+                }))
+                .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+
+            Promise.all([customerPromise, artistPromise])
+                .then(() => resolve(savedAppointment))
+                .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+        })
         .catch(error => reject(error || errorMessages.APPOINTMENT_SAVE));
 });
 
-appointmentService.update = appointment => new Promise((resolve, reject) => {
-    Appointment._findByIdAndUpdate(appointment._id, appointment, { new: true })
-        .then(updatedAppointment => resolve(updatedAppointment))
+appointmentService.update = (appointmentId, appointment) => new Promise((resolve, reject) => {
+    Appointment._findByIdAndUpdate(appointmentId, appointment, { new: true })
+        .then(updatedAppointment => {
+            if (appointment.details)
+                scheduleService.updateDates(appointmentId,
+                    appointment.details.customerScheduleId,
+                    appointment.details.artistScheduleId,
+                    appointment.dates)
+                    .then(() => resolve(updatedAppointment))
+                    .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
+            else resolve(updatedAppointment)
+        })
         .catch(error => reject(error || errorMessages.APPOINTMENT_UPDATE));
 });
 

@@ -11,8 +11,21 @@ router.route('/')
 router.route('/:idCustomer')
     .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getById)
     .patch(expressJwt({ secret: config.jwtSecret }), customerCtrl.update)
-    .delete(expressJwt({ secret: config.jwtSecret }), customerCtrl.delete)
+    .delete(expressJwt({ secret: config.jwtSecret }), customerCtrl.delete);
 
-router.param('idCustomer', customerCtrl.load)
+router.route('/:idCustomer/appointments')
+    .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getAppointments);
+
+router.route('/:idCustomer/schedule')
+    .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getSchedule);
+
+router.route('/:idCustomer/tattoo')
+    .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getTattoos)
+    .post(expressJwt({ secret: config.jwtSecret }), customerCtrl.addTattoo);
+
+router.route('/:idCustomer/lastVisit')
+    .get(expressJwt({ secret: config.jwtSecret }), customerCtrl.getLastVisit);
+
+router.param('idCustomer', customerCtrl.load);
 
 module.exports = router;

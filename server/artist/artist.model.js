@@ -6,8 +6,9 @@ const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator');
+const Schema = mongoose.Schema;
 
-const ArtistSchema = new mongoose.Schema({
+const ArtistSchema = new Schema({
     username: {
         type: String,
         required: true
@@ -44,16 +45,30 @@ const ArtistSchema = new mongoose.Schema({
         trim: true,
         required: [true, errorMessages.ARTIST_PHONE_REQUIRED]
     },
-    studio: {
-        type: String,
-        required: true
+    schedule: {
+        type: Schema.Types.ObjectId,
+        ref: 'Schedule',
     },
-    schedule: String,
-    rating: Number,
+    tattoos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tattoo',
+        autopopulate: true
+    }],
+    studio: String,
+    rating: {
+        type: Number,
+        default: 3.5
+    },
+    specialty: String,
+    experienceYears: String,
+    trace: String,
     photo: String,
+    notificationToken: String,
     createdAt: Date,
     updatedAt: Date
 });
+
+ArtistSchema.plugin(require('mongoose-autopopulate'));
 
 ArtistSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
@@ -124,6 +139,21 @@ ArtistSchema.statics.getByUserName = function (username) {
 ArtistSchema.statics._findByIdAndUpdate = function (idArtist, artist, options) {
     preUpdate(artist);
     return this.findByIdAndUpdate(idArtist, artist, options)
+};
+
+ArtistSchema.statics._addTattoo = function (artistId, tattooId) {
+    return this.findById(artistId)
+        .exec()
+        .then(artist => {
+            artist.tattoos.push(tattooId);
+            return this.findByIdAndUpdate(artistId, artist, { new: true });
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
 };
 
 module.exports = mongoose.model('Artist', ArtistSchema);

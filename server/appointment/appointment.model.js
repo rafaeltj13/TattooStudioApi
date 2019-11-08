@@ -6,17 +6,6 @@ const errorMessages = require('../helpers/errorMessages')
 const Schema = mongoose.Schema;
 
 const AppointmentSchema = new mongoose.Schema({
-  appointmentDate: [Date],
-  customer: {
-    type: Schema.Types.ObjectId,
-    ref: 'Customer',
-    autopopulate: true
-  },
-  artist: {
-    type: Schema.Types.ObjectId,
-    ref: 'Artist',
-    autopopulate: true
-  },
   tattoo: {
     type: Schema.Types.ObjectId,
     ref: 'Tattoo',
@@ -37,14 +26,14 @@ const AppointmentSchema = new mongoose.Schema({
 AppointmentSchema.plugin(require('mongoose-autopopulate'));
 
 AppointmentSchema.pre('save', function (next) {
-  this.dataCriacao = Date.now();
-  this.dataEdicao = Date.now();
+  this.createdAt = Date.now();
+  this.updatedAt = Date.now();
   next();
 });
 
 const preUpdate = (appointment, next) => {
-  delete appointment.dataCriacao;
-  appointment.dataEdicao = Date.now();
+  delete appointment.createdAt;
+  appointment.updatedAt = Date.now();
   next && next();
 };
 
