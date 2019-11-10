@@ -72,5 +72,16 @@ module.exports = Object.freeze({
     SCHEDULE_DATE_REQUIRED: 'A data do calendário é obrigatória.',
     SCHEDULE_ATUAL_SESSION_REQUIRED: 'A sessão atual do agendamento é obirgatória',
     SCHEDULE_START_DATE_REQUIRED: 'A hora inicial do agendamento é obirgatória',
-    SCHEDULE_END_DATE_REQUIRED: 'A hora final do agendamento é obirgatória'
+    SCHEDULE_END_DATE_REQUIRED: 'A hora final do agendamento é obirgatória',
+
+    //STUDIO
+    STUDIO_NOT_FOUND: 'O estúdio não foi encontrada.',
+    STUDIO_INVALID_ID: 'O ID do estúdio é inválido.',
+    STUDIO_SAVE: 'Não foi possível salvar o estúdio.',
+    STUDIO_UPDATE: 'Não foi possível atualizar o estúdio.',
+    STUDIO_DELETE: 'Não foi possível deletar o estúdio.',
+    STUDIO_NAME_REQUIRED: 'O nome do estúdio é obirgatório',
+    STUDIO_ADDRESS_REQUIRED: 'O endereço do estúdio é obirgatório',
+    STUDIO_PHONE_REQUIRED: 'O telefone do estúdio é obirgatório',
+    STUDIO_WORKTIME_REQUIRED: 'O horário de atendimento do estúdio é obirgatório',
 });
