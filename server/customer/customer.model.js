@@ -28,7 +28,6 @@ const CustomerSchema = new Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.CUSTOMER_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
-        maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
         required: [true, errorMessages.CUSTOMER_NAME_REQUIRED]
     },
     age: {

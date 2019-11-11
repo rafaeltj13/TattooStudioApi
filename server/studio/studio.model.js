@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages');
+const Schema = mongoose.Schema;
 
 const StudioSchema = new mongoose.Schema({
     name: {
@@ -25,6 +26,10 @@ const StudioSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Artist',
         autopopulate: true
+    }],
+    pendingArtists: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
     }],
     information: String,
     rating: Number,

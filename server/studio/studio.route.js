@@ -13,6 +13,6 @@ router.route('/:idStudio')
     .patch(expressJwt({ secret: config.jwtSecret }), studioCtrl.update)
     .delete(expressJwt({ secret: config.jwtSecret }), studioCtrl.delete)
 
-router.param('idStudio', tattooCtrl.load)
+router.param('idStudio', studioCtrl.load)
 
 module.exports = router;
