@@ -11,7 +11,8 @@ const Schema = mongoose.Schema;
 const ArtistSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique : true,
     },
     password: {
         type: String,
@@ -28,7 +29,8 @@ const ArtistSchema = new Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.ARTIST_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.ARTIST_NAME_MAX_LENGTH],
-        required: [true, errorMessages.ARTIST_NAME_REQUIRED]
+        required: [true, errorMessages.ARTIST_NAME_REQUIRED],
+        unique : true,
     },
     age: {
         type: Number,
@@ -40,8 +42,6 @@ const ArtistSchema = new Schema({
     },
     phone: {
         type: String,
-        /* XX9XXXXXXXX ou XXXXXXXXXX */
-        // match: [constants.USER.PHONE_NO_REGEX, errorMessages.ARTIST_PHONE_INVALID],
         trim: true,
         required: [true, errorMessages.ARTIST_PHONE_REQUIRED]
     },
@@ -54,10 +54,14 @@ const ArtistSchema = new Schema({
         ref: 'Tattoo',
         autopopulate: true
     }],
+    inStudio: {
+        type: Boolean,
+        default: false,
+    },
     studio: String,
     rating: {
         type: Number,
-        default: 3.5
+        default: 3.5,
     },
     specialty: String,
     experienceYears: String,

@@ -1,11 +1,12 @@
 const Artist = require('./artist.model');
 const errorMessages = require('../helpers/errorMessages');
 const scheduleService = require('../schedule/schedule.service');
+const studioService = require('../studio/studio.service');
 
 const artistService = {};
 
 artistService.getAll = (params = {}) => new Promise((resolve, reject) => {
-    Artist.find(params)
+    Artist.find({ "name": { "$regex": params.name || "", "$options": "i" } })
         .then(artists => resolve(artists))
         .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
 });
@@ -17,6 +18,7 @@ artistService.getById = id => new Promise((resolve, reject) => {
 });
 
 artistService.getByParams = (params = {}) => new Promise((resolve, reject) => {
+    console.log('askdfnasoikfndio', params, 'asdfsadf')
     Artist.findOne(params)
         .then(artist => resolve(artist))
         .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
@@ -29,7 +31,13 @@ artistService.create = artist => new Promise((resolve, reject) => {
             scheduleService.create()
                 .then(schedule => {
                     artistService.update(savedArtist._id, { schedule: schedule._id })
-                        .then(updatedArtist => resolve(updatedArtist))
+                        .then(updatedArtist => {
+                            if (!artist.inStudio) resolve(updatedArtist)
+
+                            studioService.artistRequest(artist.studio, savedArtist._id)
+                                .then(() => resolve(updatedArtist))
+                                .catch(error => reject(error));
+                        })
                         .catch(e => next(e));
                 })
                 .catch(e => next(e));

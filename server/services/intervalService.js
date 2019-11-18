@@ -1,21 +1,25 @@
 const intervalService = {};
 
 intervalService.getInitialAvailableHoursInterval = (morning, afternoon, night) => {
-    const availableHours = [];
+    try {
+        const availableHours = [];
 
-    for (i = morning[0]; i <= morning[1]; i++) {
-        availableHours.push([i, (i + 1)]);
+        for (i = morning[0]; i <= morning[1]; i++) {
+            availableHours.push([i, (i + 1)]);
+        }
+
+        for (i = afternoon[0]; i <= afternoon[1]; i++) {
+            availableHours.push([i, (i + 1)]);
+        }
+
+        for (i = night[0]; i <= night[1]; i++) {
+            availableHours.push([i, (i + 1)]);
+        }
+
+        return availableHours;
+    } catch (e) {
+        return [];
     }
-
-    for (i = afternoon[0]; i <= afternoon[1]; i++) {
-        availableHours.push([i, (i + 1)]);
-    }
-
-    for (i = night[0]; i <= night[1]; i++) {
-        availableHours.push([i, (i + 1)]);
-    }
-
-    return availableHours;
 };
 
 intervalService.getAvailableHours = (initialAvailableHours, appointments, date) => {

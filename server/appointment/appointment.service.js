@@ -55,7 +55,7 @@ appointmentService.create = (appointment, customerId, artistId) => new Promise((
 appointmentService.update = (appointmentId, appointment) => new Promise((resolve, reject) => {
     Appointment._findByIdAndUpdate(appointmentId, appointment, { new: true })
         .then(updatedAppointment => {
-            if (appointment.details)
+            if (appointment.details.customerScheduleId && appointment.details.artistScheduleId)
                 scheduleService.updateDates(appointmentId,
                     appointment.details.customerScheduleId,
                     appointment.details.artistScheduleId,

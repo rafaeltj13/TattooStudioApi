@@ -11,7 +11,8 @@ const Schema = mongoose.Schema;
 const CustomerSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique : true,
     },
     password: {
         type: String,
@@ -28,7 +29,8 @@ const CustomerSchema = new Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.CUSTOMER_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
-        required: [true, errorMessages.CUSTOMER_NAME_REQUIRED]
+        required: [true, errorMessages.CUSTOMER_NAME_REQUIRED],
+        unique : true,
     },
     age: {
         type: Number,

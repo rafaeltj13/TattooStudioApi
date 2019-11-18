@@ -5,10 +5,23 @@ const APIError = require('../helpers/APIError');
 const errorMessages = require('../helpers/errorMessages');
 const Schema = mongoose.Schema;
 
+const DayTimeSchema = new Schema({
+    morning: [Number],
+    afternoon: [Number],
+    night: [Number]
+});
+
+const WorkTimeSchema = new Schema({
+    week: DayTimeSchema,
+    saturday: DayTimeSchema,
+    sunday: DayTimeSchema,
+});
+
 const StudioSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, errorMessages.STUDIO_NAME_REQUIRED]
+        required: [true, errorMessages.STUDIO_NAME_REQUIRED],
+        unique: true,
     },
     address: {
         type: String,
@@ -19,7 +32,7 @@ const StudioSchema = new mongoose.Schema({
         required: [true, errorMessages.STUDIO_PHONE_REQUIRED]
     },
     workTime: {
-        type: String,
+        type: WorkTimeSchema,
         required: [true, errorMessages.STUDIO_WORKTIME_REQUIRED]
     },
     artists: [{
@@ -30,6 +43,7 @@ const StudioSchema = new mongoose.Schema({
     pendingArtists: [{
         type: Schema.Types.ObjectId,
         ref: 'Artist',
+        autopopulate: true
     }],
     information: String,
     rating: Number,
@@ -61,7 +75,7 @@ StudioSchema.methods.getStudio = () => {
     return Promise.resolve(this);
 };
 
-StudioSchema.statics.getById = id => {
+StudioSchema.statics.getById = function (id) {
     return this.findById(id)
         .exec()
         .then((studio) => {
@@ -79,9 +93,50 @@ StudioSchema.statics.getById = id => {
         });
 };
 
-StudioSchema.statics._findByIdAndUpdate = (studioId, studio, options) => {
+StudioSchema.statics._findByIdAndUpdate = function (studioId, studio, options) {
     preUpdate(studio);
     return this.findByIdAndUpdate(studioId, studio, options)
+};
+
+StudioSchema.statics._artistRequest = function (studioId, artistId) {
+    return this.findById(studioId)
+        .exec()
+        .then((studio) => {
+            if (studio) {
+                preUpdate(studio);
+                studio.pendingArtists.push(artistId)
+                return this.findByIdAndUpdate(studioId, studio, { new: true })
+            }
+            const err = new APIError(errorMessages.STUDIO_NOT_FOUND, httpStatus.NOT_FOUND);
+            return Promise.reject(err);
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.STUDIO_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
+};
+
+StudioSchema.statics._acceptArtist = function (studioId, response) {
+    return this.findById(studioId)
+        .exec()
+        .then((studio) => {
+            if (studio) {
+                preUpdate(studio);
+                studio.pendingArtists = studio.pendingArtists.filter(artist => artist._id === response.artistId);
+                if(response.response) studio.artists.push(response.artistId)
+                return this.findByIdAndUpdate(studioId, studio, { new: true })
+            }
+            const err = new APIError(errorMessages.STUDIO_NOT_FOUND, httpStatus.NOT_FOUND);
+            return Promise.reject(err);
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.STUDIO_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
 };
 
 module.exports = mongoose.model('Studio', StudioSchema);

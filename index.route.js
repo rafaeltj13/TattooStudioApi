@@ -17,8 +17,8 @@ router.use('/artists', artistRoutes);
 router.use('/appointments', appointmentRoutes);
 router.use('/tattoos', tattooRoutes);
 router.use('/schedules', scheduleRoutes);
-router.use('/studio', studioRoutes);
-router.use('/owner', ownerRoutes);
+router.use('/studios', studioRoutes);
+router.use('/owners', ownerRoutes);
 
 router.use('/images', express.static(path.join(__dirname, '/images')));
 

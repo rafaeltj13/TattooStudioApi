@@ -43,4 +43,16 @@ studioCtrl.delete = (req, res, next) => {
         .catch(e => next(e));
 };
 
+studioCtrl.artistRequest = (req, res, next) => {
+    studioService.artistRequest(req.studio._id, req.body.artistId)
+        .then(studio => res.json(studio))
+        .catch(e => next(e));
+}
+
+studioCtrl.acceptArtist = (req, res, next) => {
+    studioService.acceptArtist(req.studio._id, req.body.artistId)
+        .then(studio => res.json(studio))
+        .catch(e => next(e));
+}
+
 module.exports = studioCtrl;
