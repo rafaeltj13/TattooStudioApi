@@ -50,7 +50,7 @@ studioService.getStudioWorkTimeBySchedule = (scheduleId, date) => new Promise((r
     resolve({ morning: [8, 12], afternoon: [14, 18], night: [] })
     artistService.getByParams({ schedule: scheduleId })
         .then(artist => {
-            if (!artist.inStudio) resolve({ morning: [8, 12], afternoon: [14, 18], night: [] })
+            if (!artist.studio) resolve({ morning: [8, 12], afternoon: [14, 18], night: [] })
 
             const dayOfWeek = date.getDay();
             const day = dayOfWeek < 5 ? 'week' : dayOfWeek === 5 ? 'saturday' : 'sunday';
@@ -68,7 +68,7 @@ studioService.artistRequest = (studioId, artistId) => new Promise((resolve, reje
 studioService.acceptArtist = (studioId, response) => new Promise((resolve, reject) => {
     Studio._acceptArtist(studioId, response)
         .then(studio => {
-            artistService.update(response.artistId, { inStudio: true })
+            artistService.update(response.artistId, { studio: studioId })
                 .then(() => resolve(studio))
                 .catch(error => reject(error || errorMessages.STUDIO_NOT_FOUND));
         })

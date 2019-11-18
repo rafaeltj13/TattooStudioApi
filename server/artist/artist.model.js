@@ -12,7 +12,7 @@ const ArtistSchema = new Schema({
     username: {
         type: String,
         required: true,
-        unique : true,
+        unique: true,
     },
     password: {
         type: String,
@@ -30,7 +30,7 @@ const ArtistSchema = new Schema({
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.ARTIST_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.ARTIST_NAME_MAX_LENGTH],
         required: [true, errorMessages.ARTIST_NAME_REQUIRED],
-        unique : true,
+        unique: true,
     },
     age: {
         type: Number,
@@ -54,11 +54,10 @@ const ArtistSchema = new Schema({
         ref: 'Tattoo',
         autopopulate: true
     }],
-    inStudio: {
-        type: Boolean,
-        default: false,
+    studio: {
+        type: Schema.Types.ObjectId,
+        ref: 'Studio',
     },
-    studio: String,
     rating: {
         type: Number,
         default: 3.5,

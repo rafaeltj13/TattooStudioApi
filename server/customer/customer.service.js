@@ -12,7 +12,6 @@ customerService.getAll = (params = {}) => new Promise((resolve, reject) => {
 });
 
 customerService.getById = id => new Promise((resolve, reject) => {
-    console.log('????????????')
     Customer.getById(id)
         .then(customer => resolve(customer))
         .catch(error => reject(error || errorMessages.COSTUMER_NOT_FOUND));

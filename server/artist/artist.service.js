@@ -13,7 +13,16 @@ artistService.getAll = (params = {}) => new Promise((resolve, reject) => {
 
 artistService.getById = id => new Promise((resolve, reject) => {
     Artist.getById(id)
-        .then(artist => resolve(artist))
+        .then(artist => {
+            if (artist.studio) {
+                console.log('aaaaaaaaaaAAA', artist.studio, 'eoq')
+                studioService.getById(artist.studio)
+                    .then(studio => resolve(artist))
+                    .catch(error => reject(error));
+            } else {
+                resolve(artist);
+            }
+        })
         .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
 });
 
@@ -25,6 +34,9 @@ artistService.getByParams = (params = {}) => new Promise((resolve, reject) => {
 });
 
 artistService.create = artist => new Promise((resolve, reject) => {
+    const studioRequested = artist.studio;
+    delete artist.studio;
+
     newArtist = new Artist(artist)
     newArtist.save()
         .then(savedArtist => {
@@ -32,9 +44,9 @@ artistService.create = artist => new Promise((resolve, reject) => {
                 .then(schedule => {
                     artistService.update(savedArtist._id, { schedule: schedule._id })
                         .then(updatedArtist => {
-                            if (!artist.inStudio) resolve(updatedArtist)
+                            if (!studioRequested) resolve(updatedArtist)
 
-                            studioService.artistRequest(artist.studio, savedArtist._id)
+                            studioService.artistRequest(studioRequested, savedArtist._id)
                                 .then(() => resolve(updatedArtist))
                                 .catch(error => reject(error));
                         })
