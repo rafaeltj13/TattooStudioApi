@@ -8,6 +8,9 @@ router.route('/')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAll)
     .post(artistCtrl.create);
 
+router.route('/featured')
+    .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getFeaturedArtists)
+
 router.route('/:idArtist')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getById)
     .patch(expressJwt({ secret: config.jwtSecret }), artistCtrl.update)
@@ -21,6 +24,13 @@ router.route('/:idArtist/schedule')
 
 router.route('/:idArtist/availableHours')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getAvailableHours)
+
+router.route('/:idArtist/tattoo')
+    .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getTattoos)
+    .post(expressJwt({ secret: config.jwtSecret }), artistCtrl.addTattoo)
+
+router.route('/:idArtist/rate')
+    .patch(expressJwt({ secret: config.jwtSecret }), artistCtrl.rateArtist)
 
 router.param('idArtist', artistCtrl.load)
 

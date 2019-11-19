@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const { getInitialAvailableHoursInterval, getAvailableHours, getAvailableIntervals } = require('../services/intervalService');
+const studioService = require('../studio/studio.service');
 const errorMessages = require('../helpers/errorMessages')
 const Schema = mongoose.Schema;
 
@@ -121,29 +122,24 @@ ScheduleSchema.statics._getAvailableHours = function (scheduleId, date, interval
         .exec()
         .then(schedule => {
             if (schedule) {
-
-                const morning = [8, 12];
-                const afternoon = [14, 18];
-                const night = [20, 22];
-
-                console.log(date)
-
-                const initialAvailableHours = getInitialAvailableHoursInterval(morning, afternoon, night);
-                const availableHours = getAvailableHours(initialAvailableHours, schedule.appointments, date);
-                const availableIntervals = getAvailableIntervals(availableHours, parseInt(interval));
-
-                return availableIntervals;
-
+                return studioService.getStudioWorkTimeBySchedule(schedule._id, date)
+                    .then(({ morning, afternoon, night }) => {
+                        const initialAvailableHours = getInitialAvailableHoursInterval(morning, afternoon, night);
+                        const availableHours = getAvailableHours(initialAvailableHours, schedule.appointments, date);
+                        const availableIntervals = getAvailableIntervals(availableHours, parseInt(interval));
+                        return availableIntervals;
+                    })
+                    .catch(err => err);
+            } else {
+                const err = new APIError(errorMessages.SCHEDULE_NOT_FOUND, httpStatus.NOT_FOUND);
+                return Promise.reject(err);
             }
-            const err = new APIError(errorMessages.SCHEDULE_NOT_FOUND, httpStatus.NOT_FOUND);
-            return Promise.reject(err);
         })
-        .catch(erro => {
-            console.log(erro)
-            if (!(erro instanceof APIError)) {
-                erro = new APIError(errorMessages.SCHEDULE_INVALID_ID, httpStatus.BAD_REQUEST);
+        .catch(err => {
+            if (!(err instanceof APIError)) {
+                err = new APIError(errorMessages.SCHEDULE_INVALID_ID, httpStatus.BAD_REQUEST);
             }
-            return Promise.reject(erro);
+            return Promise.reject(err);
         });
 };
 

@@ -58,4 +58,24 @@ artistController.getAvailableHours = (req, res, next) => {
         .catch(e => next(e));
 };
 
+artistController.addTattoo = (req, res, next) => {
+    artistService.addTattoo(req.params.idArtist, req.body.tattooId)
+        .then(customer => res.json(customer))
+        .catch(e => next(e));
+};
+
+artistController.getTattoos = (req, res) => res.json(req.artist.tattoos);
+
+artistController.getFeaturedArtists = (req, res, next) => {
+    artistService.getFeaturedArtists(req.query)
+        .then(artists => res.json(artists))
+        .catch(e => next(e));
+};
+
+artistController.rateArtist = (req, res, next) => {
+    artistService.rateArtist(req.artist._id, req.body.rating)
+        .then(artist => res.json(artist))
+        .catch(e => next(e));
+};
+
 module.exports = artistController;

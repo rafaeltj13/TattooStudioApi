@@ -11,7 +11,8 @@ const Schema = mongoose.Schema;
 const CustomerSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique : true,
     },
     password: {
         type: String,
@@ -28,8 +29,8 @@ const CustomerSchema = new Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.CUSTOMER_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
-        maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.CUSTOMER_NAME_MAX_LENGTH],
-        required: [true, errorMessages.CUSTOMER_NAME_REQUIRED]
+        required: [true, errorMessages.CUSTOMER_NAME_REQUIRED],
+        unique : true,
     },
     age: {
         type: Number,
@@ -47,14 +48,23 @@ const CustomerSchema = new Schema({
     schedule: {
         type: Schema.Types.ObjectId,
         ref: 'Schedule',
-        // autopopulate: true
     },
+    tattoos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tattoo',
+        autopopulate: true
+    }],
+    lastArtistVisited: {
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
+    },
+    notificationToken: String,
     photo: String,
     createdAt: Date,
     updatedAt: Date
 });
 
-// CustomerSchema.plugin(require('mongoose-autopopulate'));
+CustomerSchema.plugin(require('mongoose-autopopulate'));
 
 CustomerSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
@@ -125,6 +135,21 @@ CustomerSchema.statics.getByUserName = function (username) {
 CustomerSchema.statics._findByIdAndUpdate = function (idCustomer, customer, options) {
     preUpdate(customer);
     return this.findByIdAndUpdate(idCustomer, customer, options)
+};
+
+CustomerSchema.statics._addTattoo = function (customerId, tattooId) {
+    return this.findById(customerId)
+        .exec()
+        .then(customer => {
+            customer.tattoos.push(tattooId);
+            return this.findByIdAndUpdate(customerId, customer, { new: true });
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.CUSTOMER_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
 };
 
 module.exports = mongoose.model('Customer', CustomerSchema);

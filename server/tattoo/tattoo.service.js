@@ -1,6 +1,8 @@
 const Tattoo = require('./tattoo.model');
 const errorMessages = require('../helpers/errorMessages');
 const imageService = require('../services/imageService');
+const customerService = require('../customer/customer.service');
+const artistService = require('../artist/artist.service');
 
 const tattooService = {};
 
@@ -32,13 +34,18 @@ tattooService.create = (tattoo, imageBase64) => new Promise((resolve, reject) =>
         newTattoo = new Tattoo(tattoo);
 
         return newTattoo.save()
-            .then(savedTatto => resolve(savedTatto))
+            .then(savedTatto => {
+                const service = tattoo.user.type === 'customer' ? customerService : artistService;
+                service.addTattoo(tattoo.user.id, savedTatto._id)
+                    .then(user => resolve(savedTatto))
+                    .catch(error => reject(error || errorMessages.TATTOO_NOT_FOUND));
+            })
             .catch(error => reject(error || errorMessages.TATTOO_SAVE));
     }).catch(error => reject(error || errorMessages.TATTOO_SAVE));
 });
 
 tattooService.update = (tattooId, tattoo) => new Promise((resolve, reject) => {
-    Tattoo._findByIdAndUpdate(tattooId, appointment, { new: true })
+    Tattoo._findByIdAndUpdate(tattooId, tattoo, { new: true })
         .then(updatedTattoo => resolve(updatedTattoo))
         .catch(error => reject(error || errorMessages.TATTOO_UPDATE));
 });

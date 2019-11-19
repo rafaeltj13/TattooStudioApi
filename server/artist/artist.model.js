@@ -7,11 +7,18 @@ const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator');
 const Schema = mongoose.Schema;
+const Studio = require('../studio/studio.model');
+
+const RatingSchema = new Schema({
+    value: Number,
+    amount: Number,
+});
 
 const ArtistSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
     password: {
         type: String,
@@ -28,7 +35,8 @@ const ArtistSchema = new Schema({
         type: String,
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.ARTIST_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.ARTIST_NAME_MAX_LENGTH],
-        required: [true, errorMessages.ARTIST_NAME_REQUIRED]
+        required: [true, errorMessages.ARTIST_NAME_REQUIRED],
+        unique: true,
     },
     age: {
         type: Number,
@@ -40,24 +48,33 @@ const ArtistSchema = new Schema({
     },
     phone: {
         type: String,
-        /* XX9XXXXXXXX ou XXXXXXXXXX */
-        // match: [constants.USER.PHONE_NO_REGEX, errorMessages.ARTIST_PHONE_INVALID],
         trim: true,
         required: [true, errorMessages.ARTIST_PHONE_REQUIRED]
     },
     schedule: {
         type: Schema.Types.ObjectId,
         ref: 'Schedule',
-        // autopopulate: true
     },
-    studio: String,
-    rating: Number,
+    tattoos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tattoo',
+        autopopulate: true
+    }],
+    studio: {
+        type: Schema.Types.ObjectId,
+        ref: 'Studio',
+    },
+    rating: RatingSchema,
+    specialty: String,
+    experienceYears: String,
+    trace: String,
     photo: String,
+    notificationToken: String,
     createdAt: Date,
     updatedAt: Date
 });
 
-// ArtistSchema.plugin(require('mongoose-autopopulate'));
+ArtistSchema.plugin(require('mongoose-autopopulate'));
 
 ArtistSchema.pre('save', function (next) {
     const errorMsg = validatePassword(this.password);
@@ -100,12 +117,21 @@ ArtistSchema.statics.getById = function (id) {
         .exec()
         .then((artist) => {
             if (artist) {
-                return artist;
+                return Studio._getArtistStudioBySchedule(artist.schedule)
+                    .then(studio => {
+                        if (Object.keys(studio).length === 0) return artist;
+
+                        artist.studio = studio;
+
+                        return artist;
+                    })
+                    .catch(error => Promise.reject(error));
+                // const err = new APIError(errorMessages.ARTIST_NOT_FOUND, httpStatus.NOT_FOUND);
+                // return Promise.reject(err);
             }
-            const err = new APIError(errorMessages.ARTIST_NOT_FOUND, httpStatus.NOT_FOUND);
-            return Promise.reject(err);
         })
         .catch(erro => {
+            console.log(erro)
             if (!(erro instanceof APIError)) {
                 erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
             }
@@ -128,6 +154,43 @@ ArtistSchema.statics.getByUserName = function (username) {
 ArtistSchema.statics._findByIdAndUpdate = function (idArtist, artist, options) {
     preUpdate(artist);
     return this.findByIdAndUpdate(idArtist, artist, options)
+};
+
+ArtistSchema.statics._addTattoo = function (artistId, tattooId) {
+    return this.findById(artistId)
+        .exec()
+        .then(artist => {
+            artist.tattoos.push(tattooId);
+            return this.findByIdAndUpdate(artistId, artist, { new: true });
+        })
+        .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
+};
+
+ArtistSchema.statics._rate = function (artistId, rating, options) {
+    return this.findById(artistId)
+        .exec()
+        .then(artist => {
+            console.log(rating)
+            preUpdate(artist);
+            if (!artist.rating || !artist.rating.value) {
+                return this.findByIdAndUpdate(artistId, { rating: { value: rating, amount: 1 } }, options)
+            } else {
+                const newRating = ((artist.rating.value * artist.rating.amount) + rating) / (artist.rating.amount + 1)
+                return this.findByIdAndUpdate(artistId, { rating: { value: newRating, amount: artist.rating.amount + 1 } }, options)
+            }
+        })
+        .catch(erro => {
+            console.log(erro)
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
 };
 
 module.exports = mongoose.model('Artist', ArtistSchema);

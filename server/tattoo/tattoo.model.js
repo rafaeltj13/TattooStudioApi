@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
-const errorMessages = require('../helpers/errorMessages')
+const errorMessages = require('../helpers/errorMessages');
 
 const TattooSchema = new mongoose.Schema({
     imagePath: {

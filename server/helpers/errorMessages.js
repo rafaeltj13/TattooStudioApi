@@ -72,5 +72,34 @@ module.exports = Object.freeze({
     SCHEDULE_DATE_REQUIRED: 'A data do calendário é obrigatória.',
     SCHEDULE_ATUAL_SESSION_REQUIRED: 'A sessão atual do agendamento é obirgatória',
     SCHEDULE_START_DATE_REQUIRED: 'A hora inicial do agendamento é obirgatória',
-    SCHEDULE_END_DATE_REQUIRED: 'A hora final do agendamento é obirgatória'
+    SCHEDULE_END_DATE_REQUIRED: 'A hora final do agendamento é obirgatória',
+
+    //STUDIO
+    STUDIO_NOT_FOUND: 'O estúdio não foi encontrada.',
+    STUDIO_INVALID_ID: 'O ID do estúdio é inválido.',
+    STUDIO_SAVE: 'Não foi possível salvar o estúdio.',
+    STUDIO_UPDATE: 'Não foi possível atualizar o estúdio.',
+    STUDIO_DELETE: 'Não foi possível deletar o estúdio.',
+    STUDIO_NAME_REQUIRED: 'O nome do estúdio é obirgatório',
+    STUDIO_ADDRESS_REQUIRED: 'O endereço do estúdio é obirgatório',
+    STUDIO_PHONE_REQUIRED: 'O telefone do estúdio é obirgatório',
+    STUDIO_WORKTIME_REQUIRED: 'O horário de atendimento do estúdio é obirgatório',
+
+    //Owner
+    OWNER_NOT_FOUND: 'O dono de estúdio não foi encontrada.',
+    OWNER_INVALID_ID: 'O ID do dono do estúdio é inválido.',
+    OWNER_SAVE: 'Não foi possível salvar o dono do estúdio.',
+    OWNER_UPDATE: 'Não foi possível atualizar o dono do estúdio.',
+    OWNER_DELETE: 'Não foi possível deletar o dono do estúdio.',
+    OWNER_NAME_MIN_LENGTH: 'O nome completo do dono do estúdio deve ter no mínimo 5 caracteres.',
+    OWNER_NAME_MAX_LENGTH: 'O nome completo do dono do estúdio deve ter no máximo 50 caracteres.',
+    OWNER_NAME_REQUIRED: 'O nome completo do dono do estúdio é obrigatório.',
+    OWNER_AGE_REQUIRED: 'A idade do dono do estúdio é obrigatório.',
+    OWNER_GENDER_REQUIRED: 'O gênero do dono do estúdio é obrigatório.',
+    OWNER_EMAIL_REQUIRED: 'O e-mail do dono do estúdio é obrigatório.',
+    OWNER_EMAIL_INVALID: 'O e-mail ({VALUE}) é inválido.',
+    OWNER_PASSWORD_REQUIRED: 'A senha do dono do estúdio é obrigatória.',
+    OWNER_PASSWORD_INVALID: 'A senha do dono do estúdio é inválida.',
+    OWNER_PHONE_REQUIRED: 'O telefone do dono do estúdio é obrigatório.',
+    OWNER_PHONE_INVALID: 'O número de telefone ({VALUE}) do dono do estúdio é inválido.',
 });
