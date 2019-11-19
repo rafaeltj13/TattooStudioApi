@@ -18,7 +18,7 @@ const convertAppointments = (appointments, type) => {
     return appointments.map(appointment => {
 
         // const image = fs.readFileSync(appointment.tattoo.imagePath);
-        const userType = type === 'artist' ? 'customer' :  'artist';
+        const userType = type === 'artist' ? 'customer' : 'artist';
 
         return {
             id: appointment._id,
@@ -33,4 +33,21 @@ const convertAppointments = (appointments, type) => {
     });
 };
 
-module.exports = { constants, convertAppointments }
+const studioRating = artists => {
+    let amount = artists.length;
+
+    const totalRating = artists.reduce((acum, artist) => {
+        if (!artist.rating || !artist.rating.value) {
+            --amount;
+            return acum;
+        }
+
+        return acum + artist.rating.value;
+    }, 0);
+
+    if (amount <= 0) return undefined;
+
+    return (totalRating / amount).toFixed(2);
+}
+
+module.exports = { constants, convertAppointments, studioRating };

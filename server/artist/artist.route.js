@@ -29,6 +29,9 @@ router.route('/:idArtist/tattoo')
     .get(expressJwt({ secret: config.jwtSecret }), artistCtrl.getTattoos)
     .post(expressJwt({ secret: config.jwtSecret }), artistCtrl.addTattoo)
 
+router.route('/:idArtist/rate')
+    .patch(expressJwt({ secret: config.jwtSecret }), artistCtrl.rateArtist)
+
 router.param('idArtist', artistCtrl.load)
 
 module.exports = router;

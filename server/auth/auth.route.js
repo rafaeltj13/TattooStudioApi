@@ -9,7 +9,7 @@ router.route('/signincustomer')
 router.route('/signinartist')
   .post(authCtrl.signinArtist)
 
-// router.route('signinowner')
-//   .post(authCtrl.signinOwner)
+router.route('/signinowner')
+  .post(authCtrl.signinOwner)
 
 module.exports = router;
