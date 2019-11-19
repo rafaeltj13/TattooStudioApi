@@ -13,7 +13,7 @@ const OwnerSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique : true,
+        unique: true,
     },
     password: {
         type: String,
@@ -31,7 +31,7 @@ const OwnerSchema = new mongoose.Schema({
         minlength: [constants.USER.NAME_MIN_LENGTH, errorMessages.OWNER_NAME_MIN_LENGTH],
         maxlength: [constants.USER.NAME_MAX_LENGTH, errorMessages.OWNER_NAME_MAX_LENGTH],
         required: [true, errorMessages.OWNER_NAME_REQUIRED],
-        unique : true,
+        unique: true,
     },
     age: {
         type: Number,
@@ -130,17 +130,24 @@ OwnerSchema.statics._studioAppointments = function (id) {
     return this.findById(id)
         .exec()
         .then((owner) => {
-            console.log('OWNBER', owner)
             if (owner) {
-
-                const appointments = [];
-
-                owner.studio.artists.forEach(artist => {
-                    appointments = [ ...appointments, ...artistService.getAppointments(artist._id) ];
+                let promises = owner.studio.artists.map(artist => {
+                    return new Promise((res, rej) => {
+                        artistService.getAppointments(artist._id)
+                            .then(appointments => res(appointments))
+                            .catch(err => rej(err))
+                    })
                 });
 
-                return appointments;
-
+                return Promise.all(promises)
+                    .then(artistAppointments => {
+                        return artistAppointments.reduce((totalAppointments, appointments) => {
+                            return [...totalAppointments, ...appointments];
+                        }, []);
+                    })
+                    .catch(err => {
+                        Promise.reject(new APIError(errorMessages.OWNER_NOT_FOUND, httpStatus.BAD_REQUEST))
+                    })
             }
             const err = new APIError(errorMessages.OWNER_NOT_FOUND, httpStatus.NOT_FOUND);
             return Promise.reject(err);

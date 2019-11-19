@@ -14,20 +14,12 @@ artistService.getAll = (params = {}) => new Promise((resolve, reject) => {
 artistService.getById = id => new Promise((resolve, reject) => {
     Artist.getById(id)
         .then(artist => {
-            if (artist.studio) {
-                console.log('aaaaaaaaaaAAA', artist.studio, 'eoq')
-                studioService.getById(artist.studio)
-                    .then(studio => resolve(artist))
-                    .catch(error => reject(error));
-            } else {
-                resolve(artist);
-            }
+            resolve(artist);
         })
         .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
 });
 
 artistService.getByParams = (params = {}) => new Promise((resolve, reject) => {
-    console.log('askdfnasoikfndio', params, 'asdfsadf')
     Artist.findOne(params)
         .then(artist => resolve(artist))
         .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
@@ -75,7 +67,11 @@ artistService.delete = id => new Promise((resolve, reject) => {
 
 artistService.getAppointments = id => new Promise((resolve, reject) => {
     artistService.getById(id)
-        .then(artist => resolve(artist.schedule.appointments))
+        .then(artist => {
+            scheduleService.getById(artist.schedule)
+                .then(schedule => resolve(schedule.appointments))
+                .catch(error => reject(error));
+        })
         .catch(error => reject(error || errorMessages.ARITST_APPOINTMENTS_NOT_FOUND));
 });
 
@@ -95,6 +91,12 @@ artistService.getFeaturedArtists = (params = {}) => new Promise((resolve, reject
     Artist.find(params).sort('-rating').limit(3)
         .then(artists => resolve(artists))
         .catch(error => reject(error || errorMessages.ARTIST_NOT_FOUND));
+});
+
+artistService.rateArtist = (artistId, rating) => new Promise((resolve, reject) => {
+    Artist._rate(artistId, rating, { new: true })
+        .then(updatedArtist => resolve(updatedArtist))
+        .catch(error => reject(error || errorMessages.ARTIST_UPDATE));
 });
 
 module.exports = artistService;

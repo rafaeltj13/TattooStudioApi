@@ -72,4 +72,10 @@ artistController.getFeaturedArtists = (req, res, next) => {
         .catch(e => next(e));
 };
 
+artistController.rateArtist = (req, res, next) => {
+    artistService.rateArtist(req.artist._id, req.body.rating)
+        .then(artist => res.json(artist))
+        .catch(e => next(e));
+};
+
 module.exports = artistController;

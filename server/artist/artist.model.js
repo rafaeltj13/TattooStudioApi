@@ -7,6 +7,12 @@ const errorMessages = require('../helpers/errorMessages')
 const { constants } = require('../helpers/utils');
 const { validatePassword } = require('../helpers/validator');
 const Schema = mongoose.Schema;
+const Studio = require('../studio/studio.model');
+
+const RatingSchema = new Schema({
+    value: Number,
+    amount: Number,
+});
 
 const ArtistSchema = new Schema({
     username: {
@@ -58,10 +64,7 @@ const ArtistSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Studio',
     },
-    rating: {
-        type: Number,
-        default: 3.5,
-    },
+    rating: RatingSchema,
     specialty: String,
     experienceYears: String,
     trace: String,
@@ -114,12 +117,21 @@ ArtistSchema.statics.getById = function (id) {
         .exec()
         .then((artist) => {
             if (artist) {
-                return artist;
+                return Studio._getArtistStudioBySchedule(artist.schedule)
+                    .then(studio => {
+                        if (Object.keys(studio).length === 0) return artist;
+
+                        artist.studio = studio;
+
+                        return artist;
+                    })
+                    .catch(error => Promise.reject(error));
+                // const err = new APIError(errorMessages.ARTIST_NOT_FOUND, httpStatus.NOT_FOUND);
+                // return Promise.reject(err);
             }
-            const err = new APIError(errorMessages.ARTIST_NOT_FOUND, httpStatus.NOT_FOUND);
-            return Promise.reject(err);
         })
         .catch(erro => {
+            console.log(erro)
             if (!(erro instanceof APIError)) {
                 erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
             }
@@ -152,6 +164,28 @@ ArtistSchema.statics._addTattoo = function (artistId, tattooId) {
             return this.findByIdAndUpdate(artistId, artist, { new: true });
         })
         .catch(erro => {
+            if (!(erro instanceof APIError)) {
+                erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
+            }
+            return Promise.reject(erro);
+        });
+};
+
+ArtistSchema.statics._rate = function (artistId, rating, options) {
+    return this.findById(artistId)
+        .exec()
+        .then(artist => {
+            console.log(rating)
+            preUpdate(artist);
+            if (!artist.rating || !artist.rating.value) {
+                return this.findByIdAndUpdate(artistId, { rating: { value: rating, amount: 1 } }, options)
+            } else {
+                const newRating = ((artist.rating.value * artist.rating.amount) + rating) / (artist.rating.amount + 1)
+                return this.findByIdAndUpdate(artistId, { rating: { value: newRating, amount: artist.rating.amount + 1 } }, options)
+            }
+        })
+        .catch(erro => {
+            console.log(erro)
             if (!(erro instanceof APIError)) {
                 erro = new APIError(errorMessages.ARTIST_INVALID_ID, httpStatus.BAD_REQUEST);
             }

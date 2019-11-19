@@ -1,11 +1,10 @@
 const Studio = require('./studio.model');
 const errorMessages = require('../helpers/errorMessages');
-const artistService = require('../artist/artist.service');
 
 const studioService = {};
 
 studioService.getAll = (params = {}) => new Promise((resolve, reject) => {
-    Studio.find({ "name": { "$regex": params.name || "", "$options": "i" } })
+    Studio.getAll({ "name": { "$regex": params.name || "", "$options": "i" } })
         .then(studios => resolve(studios))
         .catch(error => reject(error || errorMessages.STUDIO_NOT_FOUND));
 });
@@ -46,15 +45,13 @@ studioService.delete = id => new Promise((resolve, reject) => {
 });
 
 studioService.getStudioWorkTimeBySchedule = (scheduleId, date) => new Promise((resolve, reject) => {
-    console.log(artistService)
-    resolve({ morning: [8, 12], afternoon: [14, 18], night: [] })
-    artistService.getByParams({ schedule: scheduleId })
-        .then(artist => {
-            if (!artist.studio) resolve({ morning: [8, 12], afternoon: [14, 18], night: [] })
+    Studio._getArtistStudioBySchedule(scheduleId)
+        .then(studio => {
+            if (Object.keys(studio).length === 0) return resolve({ morning: [8, 12], afternoon: [14, 18], night: [null, null] });
 
-            const dayOfWeek = date.getDay();
+            const dayOfWeek = new Date(date).getDay();
             const day = dayOfWeek < 5 ? 'week' : dayOfWeek === 5 ? 'saturday' : 'sunday';
-            resolve(artist.studio.workTime[day] || { morning: [], afternoon: [], night: [] })
+            resolve(studio.workTime[day]);
         })
         .catch(error => reject(error || errorMessages.STUDIO_NOT_FOUND));
 });
@@ -67,11 +64,7 @@ studioService.artistRequest = (studioId, artistId) => new Promise((resolve, reje
 
 studioService.acceptArtist = (studioId, response) => new Promise((resolve, reject) => {
     Studio._acceptArtist(studioId, response)
-        .then(studio => {
-            artistService.update(response.artistId, { studio: studioId })
-                .then(() => resolve(studio))
-                .catch(error => reject(error || errorMessages.STUDIO_NOT_FOUND));
-        })
+        .then(studio => resolve(studio.artists))
         .catch(error => reject(error || errorMessages.STUDIO_NOT_FOUND));
 });
 

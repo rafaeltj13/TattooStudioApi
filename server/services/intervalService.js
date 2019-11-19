@@ -4,15 +4,15 @@ intervalService.getInitialAvailableHoursInterval = (morning, afternoon, night) =
     try {
         const availableHours = [];
 
-        for (i = morning[0]; i <= morning[1]; i++) {
+        for (i = morning[0]; i < morning[1]; i++) {
             availableHours.push([i, (i + 1)]);
         }
 
-        for (i = afternoon[0]; i <= afternoon[1]; i++) {
+        for (i = afternoon[0]; i < afternoon[1]; i++) {
             availableHours.push([i, (i + 1)]);
         }
 
-        for (i = night[0]; i <= night[1]; i++) {
+        for (i = night[0]; i < night[1]; i++) {
             availableHours.push([i, (i + 1)]);
         }
 
