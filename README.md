@@ -1,50 +1,30 @@
-# TattooStudio REST API
+# TattooStudio
 
-## Overview
+O TattooStudio é um hub digital para estúdios de tatuagem, com a proposta de centralizar todo o processo de realização de agendamentos de tatuagens e outros serviços reliacionados nos estúdios. Para acessar o TattoStudio, [clique aqui](http://3.14.6.217:3000).
 
-REST API of TattooStudio, built with Node.js, Express.Js and MongoDB.
+## Instalação
 
-Based on this [boilerplate](https://github.com/kunalkapadia/express-mongoose-es6-rest-api).  
+Caso seja necessário executar o sistema localmente, deve-se:
+1. Baixar o código do [servidor](https://github.com/rafaeltj13/TattooStudioApi);
+2. Baixar o código do [cliente](https://github.com/rafaeltj13/TattooStudio);
+3. Baixar a versão mais atualizada do [Node.js](https://nodejs.org/en/);
+4. Baixar o [MongoDB](https://www.mongodb.com/).
 
-## Getting Started
+### Instalando o servidor
 
-Install yarn:
-```sh
-npm install -g yarn
-# you may need sudo for this
-```
+Acesse o diretório do servidor para executar os seguintes comandos:
 
-Install dependencies:
-```sh
-yarn
-```
+`npm install -g yarn`
+`yarn`
+`cp .env.example .env`
+`npm install`
+`yarn start`
 
-Set environment (vars):
-```sh
-cp .env.example .env
-```
+### Instalando o cliente
 
-Start server:
-```sh
-# Start server
-yarn start
-```
+Acesse o diretório do cliente para executar os seguintes comandos:
 
-## Docker
+`npm install`
+`npm start`
 
-#### Using Docker Compose for Development
-```sh
-# service restarts on file change
-bash bin/development.sh
-```
-
-#### Building and running without Docker Compose
-```bash
-# To use this option you need to make sure mongodb is listening on port 27017
-
-# Build docker 
-docker build -t express-mongoose-es6-rest-api .
-
-# Run docker
-docker run -p 4040:4040 express-mongoose-es6-rest-api
-```
+O TattooStudio estará disponível localmente na porta [3000](http://localhost:3000).
